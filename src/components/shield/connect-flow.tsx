@@ -34,14 +34,13 @@ const CAT_ICONS = {
 export function CategoryScreen() {
   const category = useShield((s) => s.category);
   const setCategory = useShield((s) => s.setCategory);
-  const go = useShield((s) => s.go);
+  const startMatch = useShield((s) => s.startMatch);
 
   return (
     <div>
       <BackHeader title="What do you need help with?" />
       <div className="mb-4 rounded-2xl border border-amber-700/50 bg-amber-950/30 p-3 text-xs text-amber-200">
-        <strong>Step 2 of 2</strong> — pick a category, then tap Connect Lawyer Now. Video starts
-        automatically. First 15 min FREE. Not legal advice.
+        Pick a category only if you have time. Connect to attorney from home sends the live case instantly.
       </div>
       <div className="mb-5 space-y-2">
         {CATEGORIES.map((c) => {
@@ -69,7 +68,7 @@ export function CategoryScreen() {
       <button
         type="button"
         disabled={!category}
-        onClick={() => go("precall")}
+        onClick={startMatch}
         className="w-full rounded-2xl bg-emerald-600 py-4 text-sm font-semibold text-navy-fg disabled:opacity-40"
       >
         Connect Lawyer Now
@@ -139,19 +138,8 @@ export function ConnectScreen() {
   const matchingLabel = useShield((s) => s.matchingLabel);
   const category = useShield((s) => s.category);
   const wallet = useShield((s) => s.wallet);
-  const tickMatch = useShield((s) => s.tickMatch);
-  const beginCall = useShield((s) => s.beginCall);
   const go = useShield((s) => s.go);
   const cat = CATEGORIES.find((c) => c.id === category);
-
-  useEffect(() => {
-    if (matchingProgress >= 100) {
-      const t = setTimeout(beginCall, 900);
-      return () => clearTimeout(t);
-    }
-    const t = setTimeout(tickMatch, matchingProgress < 45 ? 450 : 550);
-    return () => clearTimeout(t);
-  }, [matchingProgress, tickMatch, beginCall]);
 
   return (
     <div>
@@ -391,6 +379,7 @@ export function CallScreen() {
 
 export function PostcallScreen() {
   const receipt = useShield((s) => s.receipt);
+  const chunks = useShield((s) => s.chunks);
   const go = useShield((s) => s.go);
   const addMatter = useShield((s) => s.addMatter);
   const logActivity = useShield((s) => s.logActivity);
@@ -434,7 +423,7 @@ export function PostcallScreen() {
             Remaining balance: <span className="font-medium">{receipt ? formatMoney(receipt.remaining) : "—"}</span>
           </div>
           <div className="mt-2 text-[10px] text-amber-200">
-            Evidence Shield saved to Legal Vault.
+            Evidence Shield saved {chunks.length} hashed GPS chunks. Dual-cam recording stopped and backed up.
           </div>
         </div>
       </div>

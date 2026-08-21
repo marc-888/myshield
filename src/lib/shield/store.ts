@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { calculateCallCost, DEMO_PIN, STARTING_CREDIT, uid } from "./data";
 import { NAV_FOR_SCREEN } from "./data";
-import { primeDualCameras } from "./evidence";
+import { primeDualCameras, publishLive } from "./evidence";
 import type {
   Activity,
   CalendarEvent,
@@ -72,12 +72,14 @@ export type ShieldState = {
   category: CategoryId | null;
   matchingProgress: number;
   matchingLabel: string;
+  matching: boolean;
   callActive: boolean;
   callSeconds: number;
   lawyerMuted: boolean;
   previewOn: boolean;
   arrestProtection: boolean;
   emergencyBanner: string | null;
+  lawyerLeft: boolean;
   pinOpen: boolean;
   pinBuffer: string;
   pinError: string | null;
@@ -122,6 +124,7 @@ export type ShieldState = {
   startMatch: () => void;
   tickMatch: () => void;
   beginCall: () => void;
+  lawyerHangUp: () => void;
   tickCall: () => void;
   toggleMute: () => void;
   togglePreview: () => void;
@@ -178,12 +181,14 @@ export const useShield = create<ShieldState>((set, get) => ({
   category: null,
   matchingProgress: 0,
   matchingLabel: "Searching panel...",
+  matching: false,
   callActive: false,
   callSeconds: 0,
   lawyerMuted: false,
   previewOn: true,
   arrestProtection: false,
   emergencyBanner: null,
+  lawyerLeft: false,
   pinOpen: false,
   pinBuffer: "",
   pinError: null,
@@ -272,34 +277,70 @@ export const useShield = create<ShieldState>((set, get) => ({
   setCategory: (id) => set({ category: id }),
 
   startMatch: () => {
-    const { category, alertsEnabled, contacts } = get();
+    const { alertsEnabled, contacts } = get();
+    if (!get().recording) {
+      void primeDualCameras();
+      set({
+        evidenceMode: "attorney",
+        recording: true,
+        recSeconds: 0,
+        torchUserOff: false,
+        torchUserOn: false,
+        chunks: [],
+        cloudOk: false,
+        camerasLive: false,
+        rearLive: false,
+        frontLive: false,
+      });
+    }
     set({
-      screen: "connect",
+      screen: "hit",
+      nav: "home",
+      matching: true,
       matchingProgress: 8,
-      matchingLabel: "Searching partner panel...",
+      matchingLabel: "Connecting you to a lawyer now…",
+      category: get().category ?? "criminal",
+      lawyerLeft: false,
+      callActive: false,
       emergencyBanner: alertsEnabled
         ? `Emergency alert sent to ${contacts[0]?.name ?? "trusted contacts"} (demo)`
         : null,
     });
-    get().logActivity(`Matching ${category ?? "general"} specialist`);
+    get().logActivity(`Instant attorney connect — ${(get().category ?? "criminal")} · dual cam live`);
+    publishLive({ type: "case", category: get().category ?? "criminal", recSeconds: get().recSeconds });
   },
 
   tickMatch: () => {
     const p = get().matchingProgress;
     if (p < 45) set({ matchingProgress: 45, matchingLabel: "Checking availability..." });
     else if (p < 85) set({ matchingProgress: 85, matchingLabel: "Matching specialist..." });
-    else set({ matchingProgress: 100, matchingLabel: "Lawyer found — starting video..." });
+    else set({ matchingProgress: 100, matchingLabel: "Lawyer found — handing them the live case" });
   },
 
   beginCall: () =>
     set({
-      screen: "call",
+      screen: "hit",
+      matching: false,
       callActive: true,
       callSeconds: 0,
       lawyerMuted: false,
       previewOn: true,
       arrestProtection: false,
+      lawyerLeft: false,
     }),
+
+  lawyerHangUp: () => {
+    if (!get().callActive && !get().matching) return;
+    set({
+      callActive: false,
+      matching: false,
+      matchingProgress: 0,
+      lawyerLeft: true,
+      pinOpen: false,
+      screen: "hit",
+    });
+    get().logActivity("Lawyer left the session — dual-cam evidence still recording");
+  },
 
   tickCall: () => set({ callSeconds: get().callSeconds + 1 }),
 
@@ -331,6 +372,7 @@ export const useShield = create<ShieldState>((set, get) => ({
     const cost = calculateCallCost(minutes);
     const remaining = Math.max(0, get().wallet - cost.total);
     localStorage.setItem(LS.wallet, String(remaining));
+    const n = get().chunks.length;
     const receipt: CallReceipt = {
       durationSec: get().callSeconds,
       total: cost.total,
@@ -341,14 +383,23 @@ export const useShield = create<ShieldState>((set, get) => ({
     };
     set({
       callActive: false,
+      matching: false,
+      matchingProgress: 0,
+      lawyerLeft: false,
       pinOpen: false,
       pinBuffer: "",
       pinError: null,
       wallet: remaining,
       screen: "postcall",
       receipt,
+      recording: false,
+      camerasLive: false,
+      rearLive: false,
+      frontLive: false,
+      torchOn: false,
     });
-    get().logActivity(`Session ended • ${cost.phase}`);
+    get().logActivity(`You ended the session — ${n} encrypted chunks saved · ${cost.phase}`);
+    publishLive({ type: "session-end" });
   },
 
   topUp: () => {
@@ -520,6 +571,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       camerasLive: false,
       rearLive: false,
       frontLive: false,
+      lawyerLeft: false,
       screen: "hit",
       nav: "home",
     });
@@ -527,9 +579,10 @@ export const useShield = create<ShieldState>((set, get) => ({
       mode === "witness"
         ? "Witness capture started — dual cam + GPS"
         : mode === "attorney"
-          ? "Attorney connect — both cameras on"
+          ? "Attorney connect — both cameras on, case sent to lawyer"
           : "SOS evidence recording started",
     );
+    if (mode === "attorney") get().startMatch();
   },
 
   stopEvidence: () => {

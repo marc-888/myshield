@@ -263,3 +263,36 @@ export function watchLux(onLux: (lux: number | null) => void) {
     return () => {};
   }
 }
+
+export const SHIELD_LIVE = "myshield-live";
+
+export type LiveMsg =
+  | { type: "chunk"; seq: number; ts: string; lat: number; lng: number; hash: string; cloud: boolean }
+  | { type: "gps"; lat: number; lng: number; accuracy: number }
+  | { type: "case"; category: string; recSeconds: number }
+  | { type: "lawyer-hangup" }
+  | { type: "session-end" };
+
+let liveBus: BroadcastChannel | null = null;
+
+function bus() {
+  if (typeof BroadcastChannel === "undefined") return null;
+  if (!liveBus) liveBus = new BroadcastChannel(SHIELD_LIVE);
+  return liveBus;
+}
+
+export function publishLive(msg: LiveMsg) {
+  try {
+    bus()?.postMessage(msg);
+  } catch {
+    /* ignore */
+  }
+}
+
+export function subscribeLive(fn: (msg: LiveMsg) => void) {
+  const ch = bus();
+  if (!ch) return () => {};
+  const handler = (e: MessageEvent<LiveMsg>) => fn(e.data);
+  ch.addEventListener("message", handler);
+  return () => ch.removeEventListener("message", handler);
+}

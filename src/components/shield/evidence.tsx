@@ -5,11 +5,12 @@ import {
   FlashlightOff,
   Lock,
   MapPin,
+  PhoneOff,
   Scale,
   Square,
   Sun,
 } from "lucide-react";
-import { CATEGORIES } from "@/lib/shield/data";
+import { CATEGORIES, LAWYER } from "@/lib/shield/data";
 import {
   attachCameras,
   applyTorch,
@@ -17,6 +18,7 @@ import {
   encryptPayload,
   makeSessionKey,
   primeDualCameras,
+  publishLive,
   resetCameraPrime,
   sampleLuma,
   setLiveStreams,
@@ -63,6 +65,7 @@ export function EvidenceEngine() {
     const unGps = watchGps((lat, lng, accuracy) => {
       gpsRef.current = { lat, lng, accuracy };
       setGps(lat, lng, accuracy);
+      publishLive({ type: "gps", lat, lng, accuracy });
     });
     const unLux = watchLux((lux) => {
       luxRef.current = lux;
@@ -125,6 +128,15 @@ export function EvidenceEngine() {
           cloud: false,
         };
         pushChunk(chunk);
+        publishLive({
+          type: "chunk",
+          seq,
+          ts,
+          lat,
+          lng,
+          hash,
+          cloud: false,
+        });
         window.setTimeout(() => markCloud(seq), 600 + Math.random() * 400);
       })();
     };
@@ -163,13 +175,20 @@ export function HitScreen() {
   const rearLive = useShield((s) => s.rearLive);
   const frontLive = useShield((s) => s.frontLive);
   const category = useShield((s) => s.category);
-  const setCategory = useShield((s) => s.setCategory);
-  const startMatch = useShield((s) => s.startMatch);
+  const matching = useShield((s) => s.matching);
+  const matchingProgress = useShield((s) => s.matchingProgress);
+  const matchingLabel = useShield((s) => s.matchingLabel);
+  const callActive = useShield((s) => s.callActive);
+  const callSeconds = useShield((s) => s.callSeconds);
+  const lawyerLeft = useShield((s) => s.lawyerLeft);
   const stopEvidence = useShield((s) => s.stopEvidence);
   const setTorchUser = useShield((s) => s.setTorchUser);
   const fireSos = useShield((s) => s.fireSos);
+  const openPin = useShield((s) => s.openPin);
+  const lawyerHangUp = useShield((s) => s.lawyerHangUp);
   const last = chunks[chunks.length - 1];
   const cloudN = chunks.filter((c) => c.cloud).length;
+  const cat = CATEGORIES.find((c) => c.id === (category ?? "criminal"));
   const [night] = useState(() => {
     const h = new Date().getHours();
     return h < 6 || h >= 18;
@@ -177,10 +196,20 @@ export function HitScreen() {
 
   useEffect(() => {
     attachCameras();
-  }, [rearLive, frontLive]);
+  }, [rearLive, frontLive, callActive, matching]);
 
   const title =
-    mode === "attorney" ? "Attorney — live evidence" : mode === "sos" ? "SOS — recording" : "Witness a crime";
+    mode === "attorney"
+      ? callActive
+        ? "Attorney live — dual cam"
+        : matching
+          ? "Connecting lawyer — dual cam"
+          : lawyerLeft
+            ? "Lawyer left — still recording"
+            : "Attorney — live evidence"
+      : mode === "sos"
+        ? "SOS — recording"
+        : "Witness a crime";
 
   return (
     <div className="flex min-h-[560px] flex-col bg-ink text-navy-fg">
@@ -235,6 +264,52 @@ export function HitScreen() {
           )}
         </div>
 
+        {mode === "attorney" ? (
+          <div className="absolute top-16 right-3 z-10 w-[42%] rounded-xl bg-navy/90 p-2 text-[9px] leading-snug text-navy-fg">
+            <div className="font-bold tracking-wide">CASE → LAWYER</div>
+            <div>{cat?.title ?? "Criminal Matters"}</div>
+            <div className="opacity-80">{MEMBER_LOC}</div>
+            {gps ? (
+              <div className="font-mono opacity-90">
+                {gps.lat.toFixed(5)}, {gps.lng.toFixed(5)}
+              </div>
+            ) : null}
+            <div>
+              Dual cam {rearLive ? "LIVE" : "SIM"}/{frontLive ? "LIVE" : "SIM"} · {chunks.length} chunks
+            </div>
+          </div>
+        ) : null}
+
+        {callActive ? (
+          <div className="absolute left-3 top-[42%] z-10 w-[34%] overflow-hidden rounded-xl border-2 border-emerald-400 bg-navy">
+            <div className="flex aspect-3/4 flex-col items-center justify-center p-2 text-center">
+              <div className="mb-1 flex size-10 items-center justify-center rounded-full bg-white/15 text-sm font-bold">
+                {LAWYER.initials}
+              </div>
+              <div className="text-[10px] font-semibold">{LAWYER.name}</div>
+              <div className="text-[8px] opacity-80">LIVE {formatTimer(callSeconds)}</div>
+              <div className="mt-1 text-[8px] text-emerald-200">Sees rear + front</div>
+            </div>
+          </div>
+        ) : null}
+
+        {matching ? (
+          <div className="absolute inset-x-8 top-[40%] z-20 rounded-2xl bg-ink/80 p-3 text-center">
+            <Scale className="mx-auto mb-1 size-5" />
+            <div className="text-xs font-semibold">{matchingLabel}</div>
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-700">
+              <div className="h-full bg-emerald-500 transition-all" style={{ width: `${matchingProgress}%` }} />
+            </div>
+            <div className="mt-1 text-[9px] text-zinc-300">Cameras and GPS stay on</div>
+          </div>
+        ) : null}
+
+        {lawyerLeft ? (
+          <div className="absolute inset-x-4 top-[38%] z-20 rounded-2xl bg-amber-500 px-3 py-2 text-center text-[11px] font-semibold text-canvas">
+            Lawyer left the call. Dual-cam evidence is still recording.
+          </div>
+        ) : null}
+
         <div className="absolute right-3 bottom-28 z-10 w-[28%] overflow-hidden rounded-xl border-2 border-white/40 bg-zinc-900 aspect-3/4">
           <video id="shield-front-cam" className="size-full object-cover" muted playsInline autoPlay />
           {!frontLive ? <SimFront night={night} /> : null}
@@ -255,32 +330,11 @@ export function HitScreen() {
       </div>
 
       <div className="space-y-2 bg-zinc-950 p-3 pb-4">
-        {mode === "attorney" ? (
-          <div>
-            <div className="mb-1 text-[10px] text-zinc-400">Both cameras on. Pick a matter, then connect.</div>
-            <div className="mb-2 flex gap-1 overflow-x-auto">
-              {CATEGORIES.map((c) => (
-                <button
-                  key={c.id}
-                  type="button"
-                  onClick={() => setCategory(c.id)}
-                  className={`shrink-0 rounded-full px-3 py-1.5 text-[10px] font-semibold ${
-                    category === c.id ? "bg-navy text-navy-fg" : "bg-zinc-800 text-zinc-300"
-                  }`}
-                >
-                  {c.title.split(" ")[0]}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              disabled={!category}
-              onClick={startMatch}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-navy py-3 text-sm font-semibold text-navy-fg disabled:opacity-40"
-            >
-              <Scale className="size-4" /> Connect to attorney
-            </button>
-          </div>
+        {mode === "attorney" && callActive ? (
+          <p className="text-[10px] text-zinc-400">
+            Lawyer is watching both cameras and the hashed GPS feed in real time. If they hang up,
+            recording keeps going. If you end it, everything is saved.
+          </p>
         ) : null}
 
         {mode === "witness" ? (
@@ -305,7 +359,15 @@ export function HitScreen() {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          {mode !== "sos" ? (
+          {callActive ? (
+            <button
+              type="button"
+              onClick={lawyerHangUp}
+              className="flex items-center justify-center gap-1 rounded-2xl bg-zinc-800 py-3 text-[11px] font-semibold text-zinc-200"
+            >
+              <PhoneOff className="size-3" /> Lawyer hangs up
+            </button>
+          ) : mode !== "sos" ? (
             <button
               type="button"
               onClick={fireSos}
@@ -316,10 +378,7 @@ export function HitScreen() {
           ) : (
             <button
               type="button"
-              onClick={() => {
-                setCategory("criminal");
-                startMatch();
-              }}
+              onClick={() => useShield.getState().startMatch()}
               className="rounded-2xl bg-navy py-3 text-sm font-semibold text-navy-fg"
             >
               Get attorney
@@ -327,16 +386,19 @@ export function HitScreen() {
           )}
           <button
             type="button"
-            onClick={stopEvidence}
+            onClick={() => (callActive ? openPin() : stopEvidence())}
             className="flex items-center justify-center gap-2 rounded-2xl bg-elev py-3 text-sm font-semibold text-ink"
           >
-            <Square className="size-3 fill-current" /> Stop & save
+            <Square className="size-3 fill-current" /> {callActive ? "End & save" : "Stop & save"}
           </button>
         </div>
       </div>
     </div>
   );
 }
+
+const MEMBER_LOC = "Gold Coast, QLD";
+
 
 function SimRear({ night, torch }: { night: boolean; torch: boolean }) {
   return (

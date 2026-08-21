@@ -17,6 +17,7 @@ import { useShield } from "@/lib/shield/store";
 import type { ScreenId } from "@/lib/shield/types";
 import { cn, formatMoney } from "@/lib/utils";
 import { EvidenceEngine } from "./evidence";
+import { subscribeLive } from "@/lib/shield/evidence";
 
 export function BackHeader({ title, to = "home" }: { title: string; to?: ScreenId }) {
   const go = useShield((s) => s.go);
@@ -87,7 +88,9 @@ export function PinModal() {
     <div className="absolute inset-0 z-40 flex items-end justify-center bg-canvas/80 p-4">
       <div className="w-full rounded-3xl border border-line bg-elev p-5">
         <div className="mb-1 text-center text-lg font-semibold">Enter PIN to end session</div>
-        <p className="mb-4 text-center text-xs text-muted">Demo PIN is {DEMO_PIN}</p>
+        <p className="mb-4 text-center text-xs text-muted">
+          This stops the lawyer and saves all dual-cam evidence. Demo PIN is {DEMO_PIN}
+        </p>
         <div className="mb-3 flex justify-center gap-2">
           {[0, 1, 2, 3].map((i) => (
             <div
@@ -368,6 +371,9 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
           {!immersive ? <BottomNav /> : null}
           <SosFab />
           {recording ? <EvidenceEngine /> : null}
+          <MatchEngine />
+          <CallTicker />
+          <LawyerBus />
           <SosOverlay />
           <PinModal />
           {!termsAccepted ? <TermsGate /> : null}
@@ -387,3 +393,41 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
     </div>
   );
 }
+
+function MatchEngine() {
+  const matching = useShield((s) => s.matching);
+  const matchingProgress = useShield((s) => s.matchingProgress);
+  const tickMatch = useShield((s) => s.tickMatch);
+  const beginCall = useShield((s) => s.beginCall);
+
+  useEffect(() => {
+    if (!matching) return;
+    if (matchingProgress >= 100) {
+      const t = window.setTimeout(beginCall, 700);
+      return () => window.clearTimeout(t);
+    }
+    const t = window.setTimeout(tickMatch, matchingProgress < 45 ? 350 : 450);
+    return () => window.clearTimeout(t);
+  }, [matching, matchingProgress, tickMatch, beginCall]);
+  return null;
+}
+
+function CallTicker() {
+  const callActive = useShield((s) => s.callActive);
+  const tickCall = useShield((s) => s.tickCall);
+  useEffect(() => {
+    if (!callActive) return;
+    const t = window.setInterval(tickCall, 1000);
+    return () => window.clearInterval(t);
+  }, [callActive, tickCall]);
+  return null;
+}
+
+function LawyerBus() {
+  const lawyerHangUp = useShield((s) => s.lawyerHangUp);
+  useEffect(() => subscribeLive((msg) => {
+    if (msg.type === "lawyer-hangup") lawyerHangUp();
+  }), [lawyerHangUp]);
+  return null;
+}
+
