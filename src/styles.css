@@ -1,0 +1,282 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --color-navy: #3b82f6;
+  --color-navy-deep: #1d4ed8;
+  --color-navy-fg: #f8fbff;
+  --color-ink: #e8eef8;
+  --color-paper: #0b0f16;
+  --color-canvas: #05070c;
+  --color-elev: #141b27;
+  --color-muted: #8b97ad;
+  --color-line: #243044;
+  --color-sos: #f43f5e;
+  --color-sos-deep: #be123c;
+  --color-sos-fg: #fff7f8;
+  --color-amber-glow: #f59e0b;
+  --color-disclaimer: #1a1408;
+  --color-disclaimer-line: #854d0e;
+  --color-disclaimer-fg: #fbbf24;
+  --color-panel: #34d399;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --radius-phone: 2.5rem;
+  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body,
+  #app {
+    min-height: 100%;
+    color-scheme: dark;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+  }
+
+  input,
+  textarea,
+  select {
+    background: var(--color-elev);
+    color: var(--color-ink);
+    border-color: var(--color-line);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: color-mix(in oklab, var(--color-muted) 80%, transparent);
+  }
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.illum {
+  --illum: var(--color-navy);
+  filter: brightness(0.58) saturate(0.92);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 0 0 1px color-mix(in oklab, var(--illum) 26%, transparent),
+    0 3px 10px color-mix(in oklab, var(--illum) 16%, transparent);
+  transition:
+    filter 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.illum:hover,
+.illum:focus-visible {
+  filter: brightness(0.82) saturate(1);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.2),
+    0 0 0 1px color-mix(in oklab, var(--illum) 42%, transparent),
+    0 6px 16px color-mix(in oklab, var(--illum) 28%, transparent);
+}
+
+.illum:active,
+.illum[aria-pressed="true"] {
+  filter: brightness(1) saturate(1.05);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 0 0 1px color-mix(in oklab, var(--illum) 55%, transparent),
+    0 8px 22px color-mix(in oklab, var(--illum) 42%, transparent);
+}
+
+.illum-navy {
+  --illum: var(--color-navy);
+}
+
+.illum-sos {
+  --illum: var(--color-sos);
+}
+
+.illum-amber {
+  --illum: var(--color-amber-glow);
+}
+
+.illum-emerald {
+  --illum: var(--color-panel);
+}
+
+button.bg-navy {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.22),
+    0 0 0 1px color-mix(in oklab, var(--color-navy) 45%, transparent),
+    0 6px 18px color-mix(in oklab, var(--color-navy) 32%, transparent);
+}
+
+.health-ring {
+  background: conic-gradient(#34d399 0% 72%, #1e293b 72% 100%);
+  border-radius: 9999px;
+  padding: 4px;
+  box-shadow: 0 0 16px rgb(52 211 153 / 0.28);
+}
+
+.health-ring-inner {
+  background: var(--color-paper);
+  border-radius: 9999px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #6ee7b7;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.6s ease-in-out infinite;
+}
+
+.rec-dot {
+  animation: rec-blink 1s step-end infinite;
+}
+
+@keyframes rec-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.slide-down {
+  animation: slide-down 0.35s ease-out;
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.cam-sim-day {
+  background: linear-gradient(180deg, #7eb6d9 0%, #c5d8e8 38%, #6b7280 38%, #4b5563 100%);
+}
+
+.cam-sim-night {
+  background: linear-gradient(180deg, #020617 0%, #0f172a 36%, #111827 36%, #020617 100%);
+}
+
+.cam-road {
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  top: 38%;
+  bottom: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0 18px, #f8fafc 18px 28px);
+  opacity: 0.35;
+  animation: cam-dash 1.2s linear infinite;
+}
+
+.cam-torch {
+  position: absolute;
+  inset: 20% -10% auto;
+  height: 80%;
+  background: radial-gradient(ellipse at top, rgba(253, 224, 71, 0.45), transparent 60%);
+  pointer-events: none;
+}
+
+.cam-front-day {
+  background:
+    radial-gradient(ellipse at 50% 18%, #f0e2c8 0%, #8b9aaa 42%, #4b5563 100%);
+}
+
+.cam-front-night {
+  background:
+    radial-gradient(ellipse at 50% 18%, #64748b 0%, #1e293b 45%, #020617 100%);
+}
+
+.cam-front-face {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 52%;
+  height: 46%;
+  transform: translate(-50%, -50%);
+  border-radius: 50% 50% 46% 46%;
+  background: radial-gradient(circle at 50% 28%, #f0c7a8, #c48b6a 70%);
+  box-shadow: inset 0 -6px 10px rgb(0 0 0 / 0.18);
+  animation: cam-breathe 2.6s ease-in-out infinite;
+}
+
+.cam-front-face::before,
+.cam-front-face::after {
+  content: "";
+  position: absolute;
+  top: 38%;
+  width: 14%;
+  height: 10%;
+  border-radius: 50%;
+  background: #1f2937;
+}
+
+.cam-front-face::before {
+  left: 22%;
+}
+
+.cam-front-face::after {
+  right: 22%;
+}
+
+@keyframes cam-breathe {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .illum,
+  button.bg-navy {
+    filter: brightness(0.7);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      0 0 0 1px color-mix(in oklab, var(--illum, var(--color-navy)) 30%, transparent);
+  }
+
+  .illum:active,
+  .illum[aria-pressed="true"] {
+    filter: brightness(1);
+  }
+
+  .pulse-ring,
+  .rec-dot,
+  .cam-road,
+  .cam-front-face {
+    animation: none;
+  }
+}

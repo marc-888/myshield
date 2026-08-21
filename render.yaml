@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: myshield
+    runtime: node
+    plan: starter
+    region: singapore
+    buildCommand: npm ci && NITRO_PRESET=node-server npm run build
+    startCommand: node .output/server/index.mjs
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NITRO_PRESET
+        value: node-server
+      - key: HOST
+        value: "0.0.0.0"

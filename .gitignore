@@ -1,0 +1,17 @@
+node_modules
+.vercel
+.output
+.nitro
+node_modules/.nitro
+dist
+.DS_Store
+*.log
+screenshots
+artifacts
+.env
+.env.local
+AGENTS.md
+AGENTS.project.md
+.grok
+.node_modules.lock
+.prettierrc

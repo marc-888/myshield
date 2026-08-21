@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#1e3a8a">
+    <title>ShieldAU Lawyer Connect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="agora-config.js"></script>
+    <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.23.2.js"></script>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen p-4">
+    <div class="max-w-lg mx-auto">
+        <div class="flex items-center gap-3 mb-6">
+            <div class="w-11 h-11 bg-blue-900 rounded-2xl flex items-center justify-center">
+                <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold">ShieldAU Lawyer</h1>
+                <p class="text-xs text-zinc-400">Agora video — panel portal</p>
+            </div>
+        </div>
+
+        <div id="join-panel" class="bg-zinc-900 border border-zinc-800 rounded-3xl p-5 mb-4">
+            <label class="text-xs text-zinc-400 block mb-1">Session channel</label>
+            <input id="channel-input" type="text" placeholder="Paste channel from client app"
+                class="w-full bg-zinc-800 border border-zinc-700 rounded-xl px-3 py-2.5 text-sm mb-3">
+            <button id="join-btn" onclick="joinAsLawyer()"
+                class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-semibold text-sm">
+                <i class="fa-solid fa-video mr-2"></i>Join video session
+            </button>
+            <p class="text-[10px] text-zinc-500 mt-3">Client shows this channel ID on the match screen. Open this page on a second device or laptop.</p>
+        </div>
+
+        <div id="call-panel" class="hidden">
+            <div class="relative bg-zinc-900 rounded-3xl overflow-hidden aspect-[9/12] mb-3 border border-zinc-800">
+                <div id="client-video" class="absolute inset-0 bg-zinc-800"></div>
+                <div class="absolute top-3 left-3 text-[10px] bg-red-600 px-2 py-1 rounded-full font-semibold">
+                    <i class="fa-solid fa-circle text-[6px] mr-1 animate-pulse"></i>LIVE
+                </div>
+                <div class="absolute bottom-3 right-3 w-24 h-32 rounded-xl overflow-hidden border-2 border-white/30 bg-zinc-700" id="lawyer-pip"></div>
+            </div>
+            <div class="text-xs text-zinc-400 mb-3" id="lawyer-status">Connected via Agora E2E</div>
+            <button onclick="leaveSession()" class="w-full py-3 bg-red-600 rounded-2xl font-semibold text-sm">Leave session</button>
+        </div>
+
+        <p id="error-msg" class="text-xs text-red-400 hidden"></p>
+    </div>
+
+    <script>
+        const LAWYER_UID = 2;
+        let agoraClient = null;
+        let localVideo = null;
+        let localAudio = null;
+
+        const params = new URLSearchParams(location.search);
+        if (params.get('channel')) {
+            document.getElementById('channel-input').value = params.get('channel');
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        async function fetchAgoraSession(channel, uid, role = 'publisher') {
+            const base = window.SHIELDAU_AGORA?.apiBase || '';
+            const configRes = await fetch(`${base}/api/agora/config`);
+            if (!configRes.ok) throw new Error('Agora API not configured — set AGORA env vars on Render');
+            const { appId } = await configRes.json();
+            const tokenRes = await fetch(`${base}/api/agora/token?channel=${encodeURIComponent(channel)}&uid=${uid}&role=${role}`);
+            if (!tokenRes.ok) {
+                const err = await tokenRes.json().catch(() => ({}));
+                throw new Error(err.error || err.hint || 'Token request failed');
+            }
+            const { token } = await tokenRes.json();
+            return { appId, token };
+        }
+
+        async function joinAsLawyer() {
+            const channel = document.getElementById('channel-input').value.trim();
+            if (!channel) { showError('Enter the channel name from the client app.'); return; }
+
+            try {
+                document.getElementById('error-msg').classList.add('hidden');
+                const { appId, token } = await fetchAgoraSession(channel, LAWYER_UID);
+
+                agoraClient = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
+                await agoraClient.join(appId, channel, token, LAWYER_UID);
+
+                localAudio = await AgoraRTC.createMicrophoneAudioTrack();
+                localVideo = await AgoraRTC.createCameraVideoTrack({ facingMode: 'user' });
+                await agoraClient.publish([localAudio, localVideo]);
+                localVideo.play(document.getElementById('lawyer-pip'));
+
+                agoraClient.on('user-published', async (user, mediaType) => {
+                    await agoraClient.subscribe(user, mediaType);
+                    if (mediaType === 'video') user.videoTrack.play(document.getElementById('client-video'));
+                    if (mediaType === 'audio') user.audioTrack.play();
+                });
+
+                document.getElementById('join-panel').classList.add('hidden');
+                document.getElementById('call-panel').classList.remove('hidden');
+            } catch (e) {
+                showError(e.message || String(e));
+            }
+        }
+
+        async function leaveSession() {
+            try {
+                if (localVideo) { localVideo.stop(); localVideo.close(); }
+                if (localAudio) { localAudio.stop(); localAudio.close(); }
+                if (agoraClient) await agoraClient.leave();
+            } catch {}
+            location.reload();
+        }
+    </script>
+</body>
+</html>
