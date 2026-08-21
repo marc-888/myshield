@@ -16,6 +16,7 @@ import {
   applyTorch,
   decideTorch,
   encryptPayload,
+  ensureDualCameras,
   makeSessionKey,
   primeDualCameras,
   publishLive,
@@ -44,7 +45,7 @@ export function EvidenceEngine() {
   const markCloud = useShield((s) => s.markCloud);
   const setCamerasLive = useShield((s) => s.setCamerasLive);
   const rearRef = useRef<HTMLVideoElement | null>(null);
-  const streams = useRef<CamStreams>({ rear: null, front: null });
+  const streams = useRef<CamStreams>({ rear: null, front: null, mode: "none" });
   const keyRef = useRef<CryptoKey | null>(null);
   const gpsRef = useRef({ lat: -27.9674, lng: 153.3997, accuracy: 18 });
   const luxRef = useRef<number | null>(null);
@@ -75,18 +76,32 @@ export function EvidenceEngine() {
       keyRef.current = await makeSessionKey();
       const cams = await primeDualCameras();
       if (cancelled) {
-        stopStreams(cams);
-        resetCameraPrime();
+        if (!useShield.getState().recording) {
+          stopStreams(cams);
+          resetCameraPrime();
+        }
         return;
       }
       streams.current = cams;
       setLiveStreams(cams);
       attachCameras();
-      setCamerasLive(Boolean(cams.rear), Boolean(cams.front));
+      setCamerasLive(Boolean(cams.rear), Boolean(cams.front), cams.mode ?? "none");
     })();
 
+    const attachTick = setInterval(attachCameras, 800);
+    const dualTick = setInterval(() => {
+      void ensureDualCameras().then((cams) => {
+        if (!cams || cancelled) return;
+        streams.current = cams;
+        setLiveStreams(cams);
+        attachCameras();
+        setCamerasLive(Boolean(cams.rear), Boolean(cams.front), cams.mode ?? "none");
+      });
+    }, 2500);
     const lightTick = setInterval(() => {
-      const rearEl = document.getElementById("shield-rear-cam") as HTMLVideoElement | null;
+      const rearEl =
+        (document.getElementById("shield-rear-cam") as HTMLVideoElement | null) ??
+        document.querySelector<HTMLVideoElement>("[data-shield-cam='rear']");
       const luma = sampleLuma(rearEl);
       const decision = decideTorch({
         userOff: userOff.current,
@@ -111,6 +126,7 @@ export function EvidenceEngine() {
           lng: Number(lng.toFixed(6)),
           accuracy: Math.round(accuracy),
           cams: "front+rear",
+          dual: streams.current.mode ?? "unknown",
           prev,
         });
         const hash = await sha256Hex(body);
@@ -146,22 +162,31 @@ export function EvidenceEngine() {
     return () => {
       cancelled = true;
       clearInterval(recTick);
+      clearInterval(attachTick);
+      clearInterval(dualTick);
       clearInterval(lightTick);
       clearInterval(chunkTick);
       clearTimeout(firstChunk);
       unGps();
       unLux();
-      stopStreams(streams.current);
-      streams.current = { rear: null, front: null };
-      setLiveStreams({ rear: null, front: null });
-      resetCameraPrime();
+      if (!useShield.getState().recording) {
+        stopStreams(streams.current);
+        streams.current = { rear: null, front: null, mode: "none" };
+        setLiveStreams({ rear: null, front: null, mode: "none" });
+        resetCameraPrime();
+      }
     };
   }, [recording, tickRec, setTorchState, setGps, pushChunk, markCloud, setCamerasLive]);
 
   // keep chunks referenced so engine re-renders hashes for HitScreen store
   void chunks.length;
   void rearRef;
-  return null;
+  return (
+    <div className="pointer-events-none fixed -left-[200px] top-0 size-px overflow-hidden opacity-0" aria-hidden>
+      <video id="shield-rear-cam-engine" data-shield-cam="rear" muted playsInline autoPlay />
+      <video id="shield-front-cam-engine" data-shield-cam="front" muted playsInline autoPlay />
+    </div>
+  );
 }
 
 export function HitScreen() {
@@ -174,6 +199,7 @@ export function HitScreen() {
   const chunks = useShield((s) => s.chunks);
   const rearLive = useShield((s) => s.rearLive);
   const frontLive = useShield((s) => s.frontLive);
+  const dualCamMode = useShield((s) => s.dualCamMode);
   const category = useShield((s) => s.category);
   const matching = useShield((s) => s.matching);
   const matchingProgress = useShield((s) => s.matchingProgress);
@@ -216,6 +242,7 @@ export function HitScreen() {
       <div className="relative min-h-[420px] flex-1 overflow-hidden">
         <video
           id="shield-rear-cam"
+          data-shield-cam="rear"
           className="absolute inset-0 size-full object-cover"
           muted
           playsInline
@@ -275,7 +302,9 @@ export function HitScreen() {
               </div>
             ) : null}
             <div>
-              Dual cam {rearLive ? "LIVE" : "SIM"}/{frontLive ? "LIVE" : "SIM"} · {chunks.length} chunks
+              Dual cam {rearLive ? "REC" : "…"}/{frontLive ? "REC" : "…"}
+              {dualCamMode === "concurrent" ? " LIVE" : dualCamMode === "multiplex" ? " both rec" : ""} · {chunks.length}{" "}
+              chunks
             </div>
           </div>
         ) : null}
@@ -311,20 +340,48 @@ export function HitScreen() {
         ) : null}
 
         <div className="absolute right-3 bottom-28 z-10 w-[28%] overflow-hidden rounded-xl border-2 border-white/40 bg-zinc-900 aspect-3/4">
-          <video id="shield-front-cam" className="size-full object-cover" muted playsInline autoPlay />
+          <video
+            id="shield-front-cam"
+            data-shield-cam="front"
+            className="size-full object-cover scale-x-[-1]"
+            muted
+            playsInline
+            autoPlay
+          />
           {!frontLive ? <SimFront night={night} /> : null}
           <div className="pointer-events-none absolute top-1 left-1 rounded bg-white/90 px-1.5 py-0.5 text-[8px] font-bold text-canvas">
             FRONT
           </div>
-          <div className="absolute bottom-1 left-1 rounded bg-sos/90 px-1.5 py-0.5 text-[8px] font-bold">REC</div>
+          {frontLive ? (
+            <div className="absolute bottom-1 left-1 rounded bg-sos/90 px-1.5 py-0.5 text-[8px] font-bold">REC</div>
+          ) : (
+            <div className="absolute bottom-1 left-1 rounded bg-amber-500/90 px-1.5 py-0.5 text-[8px] font-bold">…</div>
+          )}
         </div>
 
-        <div className="absolute bottom-3 left-3 z-10 flex gap-1">
+        <div className="absolute bottom-3 left-3 z-10 flex flex-wrap gap-1">
           <span className="rounded bg-white/90 px-1.5 py-0.5 text-[8px] font-bold text-canvas">
-            REAR {rearLive ? "LIVE" : "SIM"}
+            REAR {rearLive ? "REC" : "…"}
           </span>
           <span className="rounded bg-white/90 px-1.5 py-0.5 text-[8px] font-bold text-canvas">
-            FRONT {frontLive ? "LIVE" : "SIM"}
+            FRONT {frontLive ? "REC" : "…"}
+          </span>
+          <span
+            className={`rounded px-1.5 py-0.5 text-[8px] font-bold ${
+              rearLive && frontLive ? "bg-emerald-600 text-navy-fg" : "bg-amber-500 text-canvas"
+            }`}
+          >
+            {dualCamMode === "concurrent"
+              ? "BOTH CAMERAS LIVE"
+              : dualCamMode === "multiplex"
+                ? "BOTH CAMERAS REC"
+                : rearLive && frontLive
+                  ? "BOTH CAMERAS REC"
+                  : rearLive
+                    ? "Rear rec — opening front"
+                    : frontLive
+                      ? "Front rec — opening rear"
+                      : "Allow camera access"}
           </span>
         </div>
       </div>
@@ -339,7 +396,9 @@ export function HitScreen() {
 
         {mode === "witness" ? (
           <p className="text-[10px] text-zinc-400">
-            Dual cam + GPS hashed every 4s. Rear and front stay on for your records. Call 000 if someone is in danger.
+            Dual cam + GPS hashed every 4s. Back and front record together
+            {dualCamMode === "multiplex" ? " (this phone switches lenses so both views are captured)." : "."}{" "}
+            Call 000 if someone is in danger.
           </p>
         ) : null}
 

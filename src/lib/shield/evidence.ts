@@ -1,3 +1,5 @@
+import { applySessionTorch } from "./dual-cam";
+
 export const GC_LAT = -27.9674;
 export const GC_LNG = 153.3997;
 
@@ -96,7 +98,24 @@ export function sampleLuma(video: HTMLVideoElement | null) {
   }
 }
 
+export {
+  applySessionTorch,
+  attachCameras,
+  ensureDualCameras,
+  getLastRecordings,
+  getLiveStreams,
+  primeDualCameras,
+  resetCameraPrime,
+  setLiveStreams,
+  startDualCameras as openDualCameras,
+  stopDualCameras,
+  stopStreams,
+  type CamStreams,
+  type DualCamMode,
+} from "./dual-cam";
+
 export async function applyTorch(stream: MediaStream | null, on: boolean) {
+  if (await applySessionTorch(on)) return true;
   const track = stream?.getVideoTracks()[0];
   if (!track) return false;
   const caps = track.getCapabilities?.() as { torch?: boolean } | undefined;
@@ -107,118 +126,6 @@ export async function applyTorch(stream: MediaStream | null, on: boolean) {
   } catch {
     return false;
   }
-}
-
-export type CamStreams = { rear: MediaStream | null; front: MediaStream | null };
-
-let liveStreams: CamStreams = { rear: null, front: null };
-let primed: Promise<CamStreams> | null = null;
-
-export function setLiveStreams(streams: CamStreams) {
-  liveStreams = streams;
-}
-
-export function getLiveStreams() {
-  return liveStreams;
-}
-
-function bindVideo(el: HTMLVideoElement | null, stream: MediaStream | null) {
-  if (!el || !stream) return false;
-  if (el.srcObject !== stream) el.srcObject = stream;
-  el.muted = true;
-  el.playsInline = true;
-  el.autoplay = true;
-  el.setAttribute("playsinline", "");
-  el.setAttribute("webkit-playsinline", "");
-  void el.play().catch(() => {});
-  return true;
-}
-
-export function attachCameras() {
-  const rear = document.getElementById("shield-rear-cam") as HTMLVideoElement | null;
-  const front = document.getElementById("shield-front-cam") as HTMLVideoElement | null;
-  const rearOk = bindVideo(rear, liveStreams.rear);
-  const frontOk = bindVideo(front, liveStreams.front);
-  return { rear: rearOk, front: frontOk };
-}
-
-async function gum(constraints: MediaStreamConstraints) {
-  try {
-    return await navigator.mediaDevices.getUserMedia(constraints);
-  } catch {
-    return null;
-  }
-}
-
-export async function openDualCameras(): Promise<CamStreams> {
-  if (typeof navigator === "undefined" || !navigator.mediaDevices?.getUserMedia) {
-    return { rear: null, front: null };
-  }
-
-  let [rear, front] = await Promise.all([
-    gum({
-      audio: false,
-      video: { facingMode: { ideal: "environment" }, width: { ideal: 1280 }, height: { ideal: 720 } },
-    }),
-    gum({
-      audio: false,
-      video: { facingMode: { ideal: "user" }, width: { ideal: 640 }, height: { ideal: 480 } },
-    }),
-  ]);
-
-  if (!rear && !front) {
-    rear = await gum({ audio: false, video: true });
-  }
-
-  if (rear && front) {
-    const rearId = rear.getVideoTracks()[0]?.getSettings?.().deviceId;
-    const frontId = front.getVideoTracks()[0]?.getSettings?.().deviceId;
-    if (rearId && frontId && rearId === frontId) {
-      const devices = await navigator.mediaDevices.enumerateDevices().catch(() => [] as MediaDeviceInfo[]);
-      const other = devices.find((d) => d.kind === "videoinput" && d.deviceId && d.deviceId !== rearId);
-      if (other) {
-        const alt = await gum({ audio: false, video: { deviceId: { exact: other.deviceId } } });
-        if (alt) {
-          front.getTracks().forEach((t) => t.stop());
-          front = alt;
-        }
-      }
-    }
-  }
-
-  if (rear && !front) {
-    try {
-      front = rear.clone();
-    } catch {
-      front = null;
-    }
-  }
-
-  const mic = await gum({ audio: true, video: false });
-  if (mic && rear) {
-    mic.getAudioTracks().forEach((t) => rear!.addTrack(t));
-  } else {
-    mic?.getTracks().forEach((t) => t.stop());
-  }
-
-  return { rear, front };
-}
-
-export function primeDualCameras() {
-  if (!primed) primed = openDualCameras();
-  return primed;
-}
-
-export function resetCameraPrime() {
-  primed = null;
-}
-
-export function stopStreams(streams: CamStreams) {
-  for (const s of [streams.rear, streams.front]) {
-    s?.getTracks().forEach((t) => t.stop());
-  }
-  if (streams.rear === liveStreams.rear) liveStreams.rear = null;
-  if (streams.front === liveStreams.front) liveStreams.front = null;
 }
 
 export function watchGps(onFix: (lat: number, lng: number, accuracy: number) => void) {

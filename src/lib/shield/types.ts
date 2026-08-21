@@ -106,6 +106,8 @@ export type CallReceipt = {
 
 export type EvidenceMode = "witness" | "attorney" | "sos";
 
+export type DualCamMode = "concurrent" | "multiplex" | "none";
+
 export type EvidenceChunk = {
   seq: number;
   ts: string;

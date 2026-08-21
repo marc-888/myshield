@@ -26,4 +26,8 @@ If `shieldau.onrender.com` is still live, you can point that service at this rep
 
 ## Camera note
 
-Dual cameras need a **real phone browser** over **https**. Desktop previews often have no camera, so the app falls back to a simulated rear + front feed.
+Dual cameras need a **real phone browser** over **https**. Allow camera and microphone when asked.
+
+- Phones that can run two lenses at once (many Androids) record **back + front live**.
+- Phones that only allow one lens at a time (iPhone Safari and some Androids) still **record both cameras** by switching lenses and holding the last frame on the other view — both files keep recording.
+- A laptop with a single webcam cannot invent a back camera; the app records the camera it has.

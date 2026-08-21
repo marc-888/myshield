@@ -19,6 +19,7 @@ import type {
   SigningEntry,
   SosHit,
   VaultDoc,
+  DualCamMode,
 } from "./types";
 
 const LS = {
@@ -116,6 +117,7 @@ export type ShieldState = {
   camerasLive: boolean;
   rearLive: boolean;
   frontLive: boolean;
+  dualCamMode: DualCamMode;
   hydrate: () => void;
   acceptTerms: () => void;
   go: (screen: ScreenId) => void;
@@ -168,7 +170,7 @@ export type ShieldState = {
   setGps: (lat: number, lng: number, accuracy: number) => void;
   pushChunk: (chunk: EvidenceChunk) => void;
   markCloud: (seq: number) => void;
-  setCamerasLive: (rear: boolean, front: boolean) => void;
+  setCamerasLive: (rear: boolean, front: boolean, mode?: DualCamMode) => void;
 };
 
 export const useShield = create<ShieldState>((set, get) => ({
@@ -231,6 +233,7 @@ export const useShield = create<ShieldState>((set, get) => ({
   camerasLive: false,
   rearLive: false,
   frontLive: false,
+  dualCamMode: "none",
 
   hydrate: () => {
     if (get().hydrated) return;
@@ -291,6 +294,7 @@ export const useShield = create<ShieldState>((set, get) => ({
         camerasLive: false,
         rearLive: false,
         frontLive: false,
+        dualCamMode: "none",
       });
     }
     set({
@@ -571,6 +575,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       camerasLive: false,
       rearLive: false,
       frontLive: false,
+      dualCamMode: "none",
       lawyerLeft: false,
       screen: "hit",
       nav: "home",
@@ -587,7 +592,14 @@ export const useShield = create<ShieldState>((set, get) => ({
 
   stopEvidence: () => {
     const n = get().chunks.length;
-    set({ recording: false, camerasLive: false, rearLive: false, frontLive: false, torchOn: false });
+    set({
+      recording: false,
+      camerasLive: false,
+      rearLive: false,
+      frontLive: false,
+      dualCamMode: "none",
+      torchOn: false,
+    });
     get().logActivity(`Evidence stopped — ${n} encrypted chunks saved`);
     if (get().screen === "hit") set({ screen: "home", nav: "home" });
   },
@@ -614,5 +626,11 @@ export const useShield = create<ShieldState>((set, get) => ({
     const next = get().chunks.map((c) => (c.seq === seq ? { ...c, cloud: true } : c));
     set({ chunks: next, cloudOk: next.some((c) => c.cloud) });
   },
-  setCamerasLive: (rear, front) => set({ rearLive: rear, frontLive: front, camerasLive: rear || front }),
+  setCamerasLive: (rear, front, mode) =>
+    set({
+      rearLive: rear,
+      frontLive: front,
+      camerasLive: rear || front,
+      dualCamMode: mode ?? (rear && front ? "concurrent" : "none"),
+    }),
 }));
