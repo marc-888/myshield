@@ -9,30 +9,21 @@ Lawyer on call, witness capture, and SOS — Gold Coast demo.
 
 Demo only. Not legal advice. End a lawyer call with PIN `1234`.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/marc-888/myshield)
+
 ## Live demo on Render
 
-This repo is wired for [Render](https://render.com). After the code is on GitHub:
+One click from this repo:
 
-1. Sign in to [Render](https://dashboard.render.com) with the same GitHub account (`marc-888`).
-2. **New → Web Service → Connect `marc-888/myshield`**.
-3. Render should pick up `render.yaml`:
-   - **Name:** `myshield`
-   - **Runtime:** Node
-   - **Build:** `npm ci && NITRO_PRESET=node-server npm run build`
-   - **Start:** `node .output/server/index.mjs`
-   - **Region:** Singapore
-4. Create the service (free/starter is fine). First deploy takes a few minutes.
-5. Open the `.onrender.com` URL on your phone. Allow **camera** and **location** when Witness / Attorney / SOS asks.
+**[Deploy MyShield on Render](https://render.com/deploy?repo=https://github.com/marc-888/myshield)**
 
-If you already have `shieldau.onrender.com`, you can point that service at this repo instead of creating a new one.
+1. Open that link (sign in to Render with GitHub if asked).
+2. Confirm the web service (`myshield`, Node 22, Singapore).
+3. Click **Apply** / **Create**. First deploy takes a few minutes.
+4. Open the `.onrender.com` URL on your phone. Allow **camera** and **location**.
 
-## Local (optional)
-
-```bash
-npm ci
-npm run dev
-```
+If `shieldau.onrender.com` is still live, you can point that service at this repo instead.
 
 ## Camera note
 
-Dual cameras need a **real phone browser** over **https** (Render provides that). Desktop / in-app previews often have no camera, so the app falls back to a simulated rear + front feed.
+Dual cameras need a **real phone browser** over **https**. Desktop previews often have no camera, so the app falls back to a simulated rear + front feed.
