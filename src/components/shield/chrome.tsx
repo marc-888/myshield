@@ -182,7 +182,7 @@ export function AppHeader() {
         <button
           type="button"
           onClick={() => go("wallet")}
-          className="rounded-full bg-navy px-2.5 py-1 text-sm font-semibold tabular-nums text-navy-fg"
+          className="rounded-full bg-navy-deep px-2.5 py-1 text-sm font-semibold tabular-nums text-navy-fg"
           aria-label="Shield Credit"
         >
           {formatMoney(wallet)}
@@ -235,7 +235,7 @@ export function SosFab() {
     <button
       type="button"
       onClick={fireSos}
-      className="illum illum-navy absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
+      className="illum illum-logo absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-logo text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
       aria-label="SOS alert emergency contacts and family"
       title="SOS — alert contacts and family"
     >

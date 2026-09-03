@@ -46,7 +46,7 @@ export function HomeScreen() {
           type="button"
           onClick={fireSos}
           aria-pressed={sosOpen}
-          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          className="illum illum-logo flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-logo px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>

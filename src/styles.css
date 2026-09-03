@@ -113,9 +113,19 @@
     0 8px 20px color-mix(in oklab, var(--color-navy) 42%, transparent);
 }
 
+.illum-logo:active,
+.illum-logo[aria-pressed="true"] {
+  --illum: var(--color-logo);
+  background-color: var(--color-logo);
+}
+
 .illum-navy,
 .illum-sos {
   --illum: var(--color-navy-deep);
+}
+
+.illum-logo {
+  --illum: var(--color-logo);
 }
 
 .illum-blue {
