@@ -11,7 +11,7 @@
   --color-elev: #ffffff;
   --color-muted: #6b7280;
   --color-line: #e5e5e5;
-  --color-sos: #e11d2e;
+  --color-sos: #be0000;
   --color-sos-deep: #8f1020;
   --color-sos-fg: #ffffff;
   --color-amber-glow: #e11d2e;
@@ -119,9 +119,18 @@
   background-color: var(--color-logo);
 }
 
-.illum-navy,
-.illum-sos {
+.illum-sos:active,
+.illum-sos[aria-pressed="true"] {
+  --illum: var(--color-sos);
+  background-color: var(--color-sos);
+}
+
+.illum-navy {
   --illum: var(--color-navy-deep);
+}
+
+.illum-sos {
+  --illum: var(--color-sos);
 }
 
 .illum-logo {
@@ -178,7 +187,7 @@ html[data-theme="dark"] {
   --color-elev: #1c1c1c;
   --color-muted: #a1a1aa;
   --color-line: #2e2e2e;
-  --color-sos: #e11d2e;
+  --color-sos: #be0000;
   --color-sos-deep: #6d0c18;
   --color-sos-fg: #ffffff;
   --color-amber-glow: #e11d2e;

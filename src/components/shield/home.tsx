@@ -4,6 +4,25 @@ import { HOME_TILES, PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
 import { TILE_ICONS } from "./icons";
 
+const ASK_MOSAIC = [
+  "#8f1020",
+  "#7a1426",
+  "#a3162c",
+  "#6b101c",
+  "#9c2238",
+  "#5c0e18",
+  "#b31a32",
+  "#832028",
+  "#4e0c14",
+  "#c41e3a",
+  "#701624",
+  "#981428",
+  "#5a1822",
+  "#ad2840",
+  "#64121c",
+  "#8a1c30",
+];
+
 export function HomeScreen() {
   const go = useShield((s) => s.go);
   const fireSos = useShield((s) => s.fireSos);
@@ -46,7 +65,7 @@ export function HomeScreen() {
           type="button"
           onClick={fireSos}
           aria-pressed={sosOpen}
-          className="illum illum-logo flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-logo px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-sos px-1 py-3 text-center text-sos-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>
@@ -96,14 +115,16 @@ export function HomeScreen() {
       ) : null}
 
       <div className="mb-5 grid grid-cols-2 gap-3">
-        {HOME_TILES.map((tile) => {
+        {HOME_TILES.map((tile, i) => {
           const Icon = TILE_ICONS[tile.icon] ?? Shield;
+          const fill = ASK_MOSAIC[i % ASK_MOSAIC.length];
           return (
             <button
               key={tile.title}
               type="button"
               onClick={() => go(tile.screen)}
-              className="rounded-3xl border border-navy-deep bg-navy-deep p-4 text-left text-navy-fg"
+              className="rounded-3xl p-4 text-left text-navy-fg"
+              style={{ backgroundColor: fill }}
             >
               <Icon className="mb-2 size-5 text-navy-fg" />
               <div className="text-sm font-semibold">{tile.title}</div>
@@ -124,7 +145,8 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("aboriginal")}
-          className="col-span-2 flex items-center gap-3 rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
+          className="col-span-2 flex items-center gap-3 rounded-3xl p-4 text-left text-navy-fg"
+          style={{ backgroundColor: ASK_MOSAIC[1] }}
         >
           <Users className="size-5 text-navy-fg" />
           <div>
@@ -135,7 +157,8 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("services")}
-          className="col-span-2 flex items-center justify-between rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
+          className="col-span-2 flex items-center justify-between rounded-3xl p-4 text-left text-navy-fg"
+          style={{ backgroundColor: ASK_MOSAIC[4] }}
         >
           <div>
             <div className="text-sm font-semibold">All Legal Services</div>
