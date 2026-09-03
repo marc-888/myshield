@@ -1,4 +1,4 @@
-import { Check, Circle, Eye, Headset, Scale, Shield, Siren, Users } from "lucide-react";
+import { BookOpen, Check, Circle, Eye, Gavel, Headset, Scale, Shield, Siren, Users } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { HOME_TILES, PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
@@ -86,6 +86,27 @@ export function HomeScreen() {
         </div>
         <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-witness">Live</span>
       </button>
+
+      <div className="mb-3 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => go("resourcelibrary")}
+          className="flex min-h-[84px] flex-col items-start justify-center gap-1 rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
+        >
+          <BookOpen className="size-5" />
+          <span className="text-sm font-semibold">Resource Library</span>
+          <span className="text-[11px] opacity-90">Index of headings</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => go("litigation")}
+          className="flex min-h-[84px] flex-col items-start justify-center gap-1 rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
+        >
+          <Gavel className="size-5" />
+          <span className="text-sm font-semibold">Litigation</span>
+          <span className="text-[11px] opacity-90">Templates • letters • court</span>
+        </button>
+      </div>
 
       {showChecklist ? (
         <div className="mb-4 rounded-2xl border border-line bg-elev p-3">

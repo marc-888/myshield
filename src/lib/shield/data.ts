@@ -102,8 +102,6 @@ export const HOME_TILES: {
   span?: boolean;
   tone?: "violet" | "amber" | "navy";
 }[] = [
-  { title: "Resource Library", sub: "Index of headings", screen: "resourcelibrary", icon: "library" },
-  { title: "Litigation", sub: "Templates • letters • court", screen: "litigation", icon: "gavel" },
   { title: "Ask a Lawyer", sub: "Chat Q&A • rated experts", screen: "asklawyer", icon: "ask" },
   { title: "Legal Templates", sub: "Docs + e-sign • Rocket Lawyer", screen: "templates", icon: "file" },
   { title: "Letters & Calls", sub: "Lawyer acts for you • LegalShield", screen: "attorney", icon: "mail" },
