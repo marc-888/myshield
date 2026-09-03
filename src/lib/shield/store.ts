@@ -48,6 +48,11 @@ function writeJson(key: string, value: unknown) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+function nextHistory(history: ScreenId[], current: ScreenId, next: ScreenId): ScreenId[] {
+  if (current === next) return history;
+  return [...history, current].slice(-24);
+}
+
 const DEFAULT_EMERGENCY: Contact[] = [
   { id: "e1", name: "Sarah Mitchell", phone: "0412 345 678" },
   { id: "e2", name: "James Mitchell", phone: "0423 456 789" },
@@ -68,6 +73,7 @@ export type ShieldState = {
   hydrated: boolean;
   termsAccepted: boolean;
   screen: ScreenId;
+  history: ScreenId[];
   nav: NavTab;
   wallet: number;
   askCredits: number;
@@ -123,6 +129,7 @@ export type ShieldState = {
   hydrate: () => void;
   acceptTerms: () => void;
   go: (screen: ScreenId) => void;
+  back: () => void;
   navTo: (tab: NavTab) => void;
   setCategory: (id: CategoryId) => void;
   startMatch: () => void;
@@ -181,6 +188,7 @@ export const useShield = create<ShieldState>((set, get) => ({
   hydrated: false,
   termsAccepted: false,
   screen: "home",
+  history: [],
   nav: "home",
   wallet: STARTING_CREDIT,
   askCredits: 3,
@@ -264,7 +272,7 @@ export const useShield = create<ShieldState>((set, get) => ({
   },
 
   go: (screen) => {
-    const { callActive, pinOpen } = get();
+    const { callActive, pinOpen, screen: current, history } = get();
     if (callActive && screen !== "call" && screen !== "glovebox" && screen !== "hit") {
       if (!pinOpen) set({ pinOpen: true, pinBuffer: "", pinError: null });
       return;
@@ -272,6 +280,30 @@ export const useShield = create<ShieldState>((set, get) => ({
     set({
       screen,
       nav: NAV_FOR_SCREEN[screen],
+      history: nextHistory(history, current, screen),
+    });
+  },
+
+  back: () => {
+    const { pinOpen, sosOpen, callActive, screen, history } = get();
+    if (pinOpen) {
+      set({ pinOpen: false, pinBuffer: "", pinError: null });
+      return;
+    }
+    if (sosOpen) {
+      set({ sosOpen: false });
+      return;
+    }
+    if (callActive && screen === "call") return;
+    const prev = history[history.length - 1];
+    if (!prev) {
+      if (screen !== "home") set({ screen: "home", nav: "home", history: [] });
+      return;
+    }
+    set({
+      screen: prev,
+      nav: NAV_FOR_SCREEN[prev],
+      history: history.slice(0, -1),
     });
   },
 
@@ -282,7 +314,12 @@ export const useShield = create<ShieldState>((set, get) => ({
     }
     const screen: ScreenId =
       tab === "home" ? "home" : tab === "ask" ? "asklawyer" : tab === "glovebox" ? "glovebox" : "more";
-    set({ nav: tab, screen });
+    const { screen: current, history } = get();
+    set({
+      nav: tab,
+      screen,
+      history: tab === "home" ? [] : nextHistory(history, current, screen),
+    });
   },
 
   setCategory: (id) => set({ category: id }),
@@ -517,7 +554,10 @@ export const useShield = create<ShieldState>((set, get) => ({
   setIncident: (patch) => set({ incident: { ...get().incident, ...patch } }),
   saveIncident: () => get().logActivity("Incident notes saved (demo, browser only)"),
 
-  setSearch: (q) => set({ searchQuery: q, screen: "search" }),
+  setSearch: (q) => {
+    set({ searchQuery: q });
+    if (get().screen !== "search") get().go("search");
+  },
 
   callHotline: () =>
     set({
@@ -587,6 +627,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       lawyerLeft: false,
       screen: "hit",
       nav: "home",
+      history: nextHistory(get().history, get().screen, "hit"),
     });
     get().logActivity(
       mode === "witness"
@@ -609,7 +650,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       torchOn: false,
     });
     get().logActivity(`Evidence stopped — ${n} encrypted chunks saved`);
-    if (get().screen === "hit") set({ screen: "home", nav: "home" });
+    if (get().screen === "hit") set({ screen: "home", nav: "home", history: [] });
   },
 
   tickRec: () => {

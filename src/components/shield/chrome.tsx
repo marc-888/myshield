@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
@@ -22,11 +22,13 @@ import { subscribeLive } from "@/lib/shield/evidence";
 
 export function BackHeader({ title, to = "home" }: { title: string; to?: ScreenId }) {
   const go = useShield((s) => s.go);
+  const back = useShield((s) => s.back);
+  const history = useShield((s) => s.history);
   return (
     <div className="mb-4 flex items-center gap-3">
       <button
         type="button"
-        onClick={() => go(to)}
+        onClick={() => (history.length ? back() : go(to))}
         className="text-muted hover:text-ink"
         aria-label="Back"
       >
@@ -331,17 +333,34 @@ export function SosOverlay() {
 
 export function PhoneChrome({ children }: { children: ReactNode }) {
   const go = useShield((s) => s.go);
+  const back = useShield((s) => s.back);
   const termsAccepted = useShield((s) => s.termsAccepted);
   const screen = useShield((s) => s.screen);
   const recording = useShield((s) => s.recording);
   const recSeconds = useShield((s) => s.recSeconds);
   const theme = useShield((s) => s.theme);
+  const callActive = useShield((s) => s.callActive);
   const immersive = screen === "hit" || screen === "call";
+  const swipeFrom = useRef<{ x: number; y: number } | null>(null);
+  const canSwipeBack = termsAccepted && screen !== "home" && !(callActive && screen === "call");
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
   }, [theme]);
+
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (!canSwipeBack || e.isPrimary === false) return;
+    swipeFrom.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    const from = swipeFrom.current;
+    swipeFrom.current = null;
+    if (!from || !canSwipeBack) return;
+    const dx = e.clientX - from.x;
+    const dy = e.clientY - from.y;
+    if (dx > 80 && Math.abs(dy) < 72 && dx > Math.abs(dy)) back();
+  };
 
   return (
     <div className="min-h-dvh bg-canvas sm:py-8">
@@ -365,7 +384,14 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <div className="relative min-h-dvh overflow-hidden bg-paper sm:min-h-[520px] sm:rounded-[40px] sm:border-[12px] sm:border-zinc-950 sm:shadow-2xl">
+        <div
+          className="relative min-h-dvh overflow-hidden bg-paper sm:min-h-[520px] sm:rounded-[40px] sm:border-[12px] sm:border-zinc-950 sm:shadow-2xl"
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerCancel={() => {
+            swipeFrom.current = null;
+          }}
+        >
           <StatusBar />
           {!immersive ? (
             <div className="disclaimer-bar overflow-hidden border-b border-disclaimer-line bg-disclaimer px-3 py-1.5 text-center text-[8px] leading-none whitespace-nowrap text-disclaimer-fg">
