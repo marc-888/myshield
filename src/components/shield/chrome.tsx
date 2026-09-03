@@ -44,6 +44,23 @@ export function InfoBadge({ children }: { children: ReactNode }) {
   );
 }
 
+export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
+  const text = size === "lg" ? "text-3xl tracking-tighter" : "text-xl tracking-tight";
+  const box = size === "lg" ? "size-10 rounded-2xl" : "size-8 rounded-xl";
+  const glyph = size === "lg" ? "size-5" : "size-4";
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <div className={cn("illum illum-navy flex items-center justify-center bg-navy text-navy-fg", box)}>
+        <Shield className={glyph} />
+      </div>
+      <div className={cn("font-display text-navy", text)} aria-label={APP_NAME}>
+        <span className="font-medium">my</span>
+        <span>Shield</span>
+      </div>
+    </div>
+  );
+}
+
 export function TermsGate() {
   const acceptTerms = useShield((s) => s.acceptTerms);
   const [checked, setChecked] = useState(false);
@@ -157,19 +174,13 @@ export function AppHeader() {
       <button
         type="button"
         onClick={() => go("wallet")}
-        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full border border-panel/40 bg-panel/10 px-2.5 py-1 text-sm font-semibold tabular-nums text-panel"
+        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-navy px-2.5 py-1 text-sm font-semibold tabular-nums text-navy-fg"
         aria-label="Shield Credit"
       >
         {formatMoney(wallet)}
       </button>
-      <div className="flex items-center justify-center gap-2">
-        <div className="illum illum-navy flex size-8 items-center justify-center rounded-xl bg-navy text-navy-fg">
-          <Shield className="size-4" />
-        </div>
-        <div className="font-display text-xl tracking-tight" aria-label={APP_NAME}>
-          <span className="text-ink">My</span>
-          <span className="text-navy">Shield</span>
-        </div>
+      <div className="flex items-center justify-center">
+        <BrandMark />
       </div>
     </div>
   );
@@ -218,7 +229,7 @@ export function SosFab() {
     <button
       type="button"
       onClick={fireSos}
-      className="illum illum-sos absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-linear-to-b from-sos to-sos-deep text-[10px] font-bold tracking-wide text-sos-fg active:scale-95"
+      className="illum illum-navy absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
       aria-label="SOS alert emergency contacts and family"
       title="SOS — alert contacts and family"
     >
@@ -245,7 +256,7 @@ export function SosOverlay() {
     <div className="absolute inset-0 z-50 flex items-end justify-center bg-canvas/80 p-4 sm:items-center">
       <div className="max-h-[90%] w-full overflow-y-auto rounded-3xl border border-line bg-elev p-5 shadow-2xl">
         <div className="mb-3 flex items-center gap-3">
-          <div className="pulse-ring illum illum-sos flex size-12 items-center justify-center rounded-2xl bg-sos text-sos-fg">
+          <div className="pulse-ring illum illum-navy flex size-12 items-center justify-center rounded-2xl bg-navy text-navy-fg">
             <Siren className="size-6" />
           </div>
           <div>
@@ -325,24 +336,18 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
       <div className="mx-auto max-w-[420px]">
         <div className="mb-4 hidden items-center justify-between px-3 sm:flex">
           <div className="flex items-center gap-3">
-            <div className="illum illum-navy flex size-10 items-center justify-center rounded-2xl bg-navy text-navy-fg">
-              <Shield className="size-5" />
-            </div>
-            <div>
-              <span className="font-display text-3xl tracking-tighter text-ink">My</span>
-              <span className="font-display text-3xl tracking-tighter text-navy">Shield</span>
-            </div>
+            <BrandMark size="lg" />
           </div>
           <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => go("partner")}
-              className="rounded-full bg-elev px-3 py-1 text-[10px] font-medium text-panel"
+              className="rounded-full bg-navy px-3 py-1 text-[10px] font-medium text-navy-fg"
             >
               Partner copy
             </button>
             <div className="flex items-center gap-1.5 rounded-full bg-elev px-3 py-1 text-xs text-muted">
-              <span className="size-2 animate-pulse rounded-full bg-panel" />
+          <span className="size-2 animate-pulse rounded-full bg-navy" />
               Ultimate v2.0
             </div>
           </div>
@@ -380,7 +385,7 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
         </div>
 
         <p className="mt-4 hidden px-4 text-center text-[10px] text-muted sm:block">
-          MyShield — lawyer on call, witness capture, SOS. Demo only.{" "}
+          myShield — lawyer on call, witness capture, SOS. Demo only.{" "}
           <Link to="/lawyer" className="text-navy underline">
             Lawyer portal
           </Link>

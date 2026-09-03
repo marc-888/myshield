@@ -1,4 +1,4 @@
-# MyShield
+# myShield
 
 Lawyer on call, witness capture, and SOS — Gold Coast demo.
 

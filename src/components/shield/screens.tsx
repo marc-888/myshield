@@ -770,7 +770,7 @@ export function WalletScreen() {
   return (
     <div>
       <BackHeader title="Shield Credit" />
-      <div className="mb-4 rounded-3xl bg-linear-to-br from-emerald-600 to-emerald-800 p-5 text-navy-fg">
+      <div className="mb-4 rounded-3xl bg-navy p-5 text-navy-fg">
         <div className="text-sm opacity-90">Available credit</div>
         <div className="mt-1 text-3xl font-semibold">{formatMoney(wallet)}</div>
         <div className="mt-2 text-xs opacity-80">Shield Basic $15/mo • Renews 25 July 2026</div>
@@ -814,7 +814,7 @@ export function WalletScreen() {
           </tbody>
         </table>
       </div>
-      <button type="button" onClick={topUp} className="w-full rounded-2xl bg-emerald-600 py-3 text-sm font-semibold text-navy-fg">
+      <button type="button" onClick={topUp} className="w-full rounded-2xl bg-navy py-3 text-sm font-semibold text-navy-fg">
         Top up $50 credit (demo)
       </button>
     </div>

@@ -57,7 +57,7 @@ function LawyerPortal() {
             <Scale className="size-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold">MyShield Lawyer</h1>
+            <h1 className="text-xl font-bold">myShield Lawyer</h1>
             <p className="text-xs text-zinc-400">{LAWYER.name} · live dual-cam + GPS</p>
           </div>
         </div>
@@ -71,7 +71,7 @@ function LawyerPortal() {
             <button
               type="button"
               onClick={() => setJoined(true)}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-emerald-600 py-3.5 text-sm font-semibold hover:bg-emerald-500"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-navy py-3.5 text-sm font-semibold text-navy-fg hover:bg-navy-deep"
             >
               <Video className="size-4" /> Join live session
             </button>

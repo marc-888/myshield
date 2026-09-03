@@ -1,6 +1,6 @@
 import type { CategoryId, GloveboxType, ScreenId } from "./types";
 
-export const APP_NAME = "MyShield";
+export const APP_NAME = "myShield";
 export const DEMO_PIN = "1234";
 export const LAWYER_HOURLY_RATE = 360;
 export const PER_MIN = LAWYER_HOURLY_RATE / 60;

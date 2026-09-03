@@ -2,27 +2,27 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #3b82f6;
-  --color-navy-deep: #1d4ed8;
-  --color-navy-fg: #f8fbff;
-  --color-ink: #e8eef8;
-  --color-paper: #0b0f16;
-  --color-canvas: #05070c;
-  --color-elev: #141b27;
-  --color-muted: #8b97ad;
-  --color-line: #243044;
-  --color-sos: #f43f5e;
-  --color-sos-deep: #be123c;
-  --color-sos-fg: #fff7f8;
-  --color-amber-glow: #f59e0b;
-  --color-disclaimer: #1a1408;
-  --color-disclaimer-line: #854d0e;
-  --color-disclaimer-fg: #fbbf24;
-  --color-panel: #34d399;
+  --color-navy: #e11d2e;
+  --color-navy-deep: #b91c1c;
+  --color-navy-fg: #ffffff;
+  --color-ink: #1a1a1a;
+  --color-paper: #ffffff;
+  --color-canvas: #f5f5f5;
+  --color-elev: #ffffff;
+  --color-muted: #6b7280;
+  --color-line: #e5e5e5;
+  --color-sos: #e11d2e;
+  --color-sos-deep: #9f1239;
+  --color-sos-fg: #ffffff;
+  --color-amber-glow: #e11d2e;
+  --color-disclaimer: #fff1f2;
+  --color-disclaimer-line: #fecaca;
+  --color-disclaimer-fg: #9f1239;
+  --color-panel: #e11d2e;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --radius-phone: 2.5rem;
-  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.08);
+  --shadow-border: 0 0 0 1px rgb(225 29 46 / 0.12);
 }
 
 @layer base {
@@ -35,7 +35,7 @@
   body,
   #app {
     min-height: 100%;
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   body {
@@ -93,20 +93,11 @@
     0 8px 22px color-mix(in oklab, var(--illum) 42%, transparent);
 }
 
-.illum-navy {
-  --illum: var(--color-navy);
-}
-
-.illum-sos {
-  --illum: var(--color-sos);
-}
-
-.illum-amber {
-  --illum: var(--color-amber-glow);
-}
-
+.illum-navy,
+.illum-sos,
+.illum-amber,
 .illum-emerald {
-  --illum: var(--color-panel);
+  --illum: var(--color-navy);
 }
 
 button.bg-navy {
@@ -116,11 +107,21 @@ button.bg-navy {
     0 6px 18px color-mix(in oklab, var(--color-navy) 32%, transparent);
 }
 
+button.bg-emerald-600,
+button.bg-amber-700,
+button.bg-amber-600,
+button.from-sos,
+button.bg-sos {
+  background-color: var(--color-navy) !important;
+  background-image: none !important;
+  color: var(--color-navy-fg) !important;
+}
+
 .health-ring {
-  background: conic-gradient(#34d399 0% 72%, #1e293b 72% 100%);
+  background: conic-gradient(#e11d2e 0% 72%, #f4f4f5 72% 100%);
   border-radius: 9999px;
   padding: 4px;
-  box-shadow: 0 0 16px rgb(52 211 153 / 0.28);
+  box-shadow: 0 0 16px rgb(225 29 46 / 0.28);
 }
 
 .health-ring-inner {
@@ -133,7 +134,7 @@ button.bg-navy {
   justify-content: center;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #6ee7b7;
+  color: #e11d2e;
 }
 
 @keyframes pulse-ring {

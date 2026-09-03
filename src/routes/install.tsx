@@ -34,7 +34,7 @@ function InstallPage() {
         </div>
         <Link
           to="/"
-          className="mb-3 block w-full rounded-2xl bg-emerald-600 py-4 text-center font-semibold hover:bg-emerald-500"
+          className="mb-3 block w-full rounded-2xl bg-navy py-4 text-center font-semibold text-navy-fg hover:bg-navy-deep"
         >
           Open {APP_NAME}
         </Link>

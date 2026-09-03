@@ -2,7 +2,6 @@ import { Check, Circle, Eye, Headset, Scale, Shield, Siren, Users } from "lucide
 import { Link } from "@tanstack/react-router";
 import { HOME_TILES, PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
-import { InfoBadge } from "./chrome";
 import { TILE_ICONS } from "./icons";
 
 export function HomeScreen() {
@@ -29,7 +28,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("hotline")}
-          className="illum illum-emerald flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-panel px-1 py-3 text-center text-canvas active:scale-[0.97]"
+          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Headset className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">24/7</span>
@@ -37,7 +36,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => startEvidence("witness")}
-          className="illum illum-amber flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-amber-glow px-1 py-3 text-center text-canvas active:scale-[0.97]"
+          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Eye className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">Witness</span>
@@ -45,7 +44,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={fireSos}
-          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-linear-to-b from-sos to-sos-deep px-1 py-3 text-center text-sos-fg active:scale-[0.97]"
+          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>
@@ -64,7 +63,7 @@ export function HomeScreen() {
                 type="button"
                 onClick={() => go(item.screen)}
                 className={`rounded-lg px-2 py-1.5 text-left ${
-                  item.done ? "bg-emerald-500/15 text-panel" : "bg-amber-500/15 text-amber-200"
+                  item.done ? "bg-navy/10 text-navy" : "bg-navy/5 text-ink"
                 }`}
               >
                 {item.done ? (
@@ -82,7 +81,7 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startEvidence("attorney")}
-        className="illum illum-navy mb-3 flex w-full items-center gap-4 rounded-3xl bg-linear-to-r from-navy-deep to-navy p-4 text-left text-navy-fg"
+        className="illum illum-navy mb-3 flex w-full items-center gap-4 rounded-3xl bg-navy p-4 text-left text-navy-fg"
       >
         <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
           <Scale className="size-6" />
@@ -91,7 +90,7 @@ export function HomeScreen() {
           <div className="text-sm font-semibold">Connect to attorney</div>
           <div className="text-[11px] opacity-80">Live dual-cam · hashed GPS evidence</div>
         </div>
-        <span className="rounded-full bg-panel px-2 py-1 text-[10px] font-medium text-canvas">Live</span>
+        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-navy">Live</span>
       </button>
 
       <div className="mb-5 grid grid-cols-2 gap-3">
@@ -102,20 +101,18 @@ export function HomeScreen() {
               key={tile.title}
               type="button"
               onClick={() => go(tile.screen)}
-              className={`rounded-3xl border p-4 text-left ${
-                tile.tone === "violet"
-                  ? "border-navy/40 bg-navy/10"
-                  : "border-line bg-elev hover:border-navy/40"
-              }`}
+              className="rounded-3xl border border-navy bg-navy p-4 text-left text-navy-fg"
             >
-              <Icon className="mb-2 size-5 text-navy" />
+              <Icon className="mb-2 size-5 text-navy-fg" />
               <div className="text-sm font-semibold">{tile.title}</div>
               {tile.badge ? (
                 <div className="mt-1">
-                  <InfoBadge>{tile.badge}</InfoBadge>
+                  <span className="inline-block rounded-full bg-white px-2 py-0.5 text-[10px] font-medium text-navy">
+                    {tile.badge}
+                  </span>
                 </div>
               ) : (
-                <div className="text-xs text-muted">
+                <div className="text-xs opacity-80">
                   {tile.title === "Family Plan" ? `${family.length} sub-accounts` : tile.sub}
                 </div>
               )}
@@ -125,12 +122,12 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("aboriginal")}
-          className="col-span-2 flex items-center gap-3 rounded-3xl border border-amber-700/40 bg-amber-950/30 p-4 text-left"
+          className="col-span-2 flex items-center gap-3 rounded-3xl bg-navy p-4 text-left text-navy-fg"
         >
-          <Users className="size-5 text-amber-glow" />
+          <Users className="size-5 text-navy-fg" />
           <div>
             <div className="text-sm font-semibold">Aboriginal Legal Services</div>
-            <div className="text-xs text-amber-200">Free 24/7 culturally safe help — ATSILS, ALS, VALS</div>
+            <div className="text-xs opacity-80">Free 24/7 culturally safe help — ATSILS, ALS, VALS</div>
           </div>
         </button>
         <button
@@ -140,7 +137,7 @@ export function HomeScreen() {
         >
           <div>
             <div className="text-sm font-semibold">All Legal Services</div>
-            <div className="text-xs opacity-80">24 tools — Rocket Lawyer, LegalZoom, LegalShield, JustAnswer + MyShield</div>
+            <div className="text-xs opacity-80">24 tools — Rocket Lawyer, LegalZoom, LegalShield, JustAnswer + myShield</div>
           </div>
         </button>
       </div>

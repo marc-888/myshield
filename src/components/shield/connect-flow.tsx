@@ -69,7 +69,7 @@ export function CategoryScreen() {
         type="button"
         disabled={!category}
         onClick={startMatch}
-        className="w-full rounded-2xl bg-emerald-600 py-4 text-sm font-semibold text-navy-fg disabled:opacity-40"
+        className="w-full rounded-2xl bg-navy py-4 text-sm font-semibold text-navy-fg disabled:opacity-40"
       >
         Connect Lawyer Now
       </button>
@@ -125,7 +125,7 @@ export function PrecallScreen() {
         type="button"
         disabled={!ok}
         onClick={startMatch}
-        className="w-full rounded-2xl bg-emerald-600 py-4 text-sm font-semibold text-navy-fg disabled:opacity-40"
+        className="w-full rounded-2xl bg-navy py-4 text-sm font-semibold text-navy-fg disabled:opacity-40"
       >
         Proceed to Video Connect
       </button>
@@ -430,7 +430,7 @@ export function PostcallScreen() {
       <button
         type="button"
         onClick={() => logActivity("Call receipt downloaded (demo)")}
-        className="mb-2 w-full rounded-2xl bg-emerald-600 py-3 text-sm font-semibold text-navy-fg"
+        className="mb-2 w-full rounded-2xl bg-navy py-3 text-sm font-semibold text-navy-fg"
       >
         Download call receipt (PDF)
       </button>
