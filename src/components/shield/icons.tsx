@@ -8,8 +8,10 @@ import {
   ClipboardList,
   FileText,
   FolderClosed,
+  Gavel,
   Landmark,
   Leaf,
+  Library,
   Mail,
   MessageSquare,
   Scale,
@@ -20,6 +22,8 @@ import {
 
 export const TILE_ICONS: Record<string, LucideIcon> = {
   ask: MessageSquare,
+  library: Library,
+  gavel: Gavel,
   file: FileText,
   mail: Mail,
   briefcase: Briefcase,

@@ -102,6 +102,8 @@ export const HOME_TILES: {
   span?: boolean;
   tone?: "violet" | "amber" | "navy";
 }[] = [
+  { title: "Resource Library", sub: "Index of headings", screen: "resourcelibrary", icon: "library" },
+  { title: "Litigation", sub: "Templates • letters • court", screen: "litigation", icon: "gavel" },
   { title: "Ask a Lawyer", sub: "Chat Q&A • rated experts", screen: "asklawyer", icon: "ask" },
   { title: "Legal Templates", sub: "Docs + e-sign • Rocket Lawyer", screen: "templates", icon: "file" },
   { title: "Letters & Calls", sub: "Lawyer acts for you • LegalShield", screen: "attorney", icon: "mail" },
@@ -127,6 +129,8 @@ export const SERVICE_INDEX: { name: string; screen: ScreenId; tags: string; cat:
   { name: "Witness a Crime", screen: "witness", tags: "witness crime statement police", cat: "Emergency" },
   { name: "24/7 Legal Hotline", screen: "hotline", tags: "phone call legalshield", cat: "Emergency" },
   { name: "Ask a Lawyer", screen: "asklawyer", tags: "chat question justanswer", cat: "Consult" },
+  { name: "Resource Library", screen: "resourcelibrary", tags: "headings index guides library", cat: "Resources" },
+  { name: "Litigation", screen: "litigation", tags: "templates letters court register", cat: "Court" },
   { name: "Shield Copilot AI", screen: "copilot", tags: "ai draft rocket lawyer", cat: "Consult" },
   { name: "Browse Experts", screen: "experts", tags: "specialist justanswer", cat: "Consult" },
   { name: "Legal Templates", screen: "templates", tags: "document rocket lawyer", cat: "Documents" },
@@ -167,6 +171,53 @@ export const TEMPLATES = [
   { id: "lease", name: "Residential Lease Agreement", body: "Residential Tenancy Agreement\nLessor:\nTenant:\nRent:\nBond:\nTerm:\n" },
   { id: "poa", name: "Enduring Power of Attorney", body: "Enduring Power of Attorney (Qld)\nPrincipal:\nAttorney:\nPowers: financial / personal / health\n" },
   { id: "separation", name: "Separation Agreement", body: "Separation Agreement\nParties:\nDate of separation:\nParenting / property in principle (not legal advice):\n" },
+];
+
+export const RESOURCE_HEADINGS: { title: string; screen: ScreenId }[] = [
+  { title: "Know Your Rights", screen: "rights" },
+  { title: "Roadside breath & saliva tests (QLD)", screen: "library" },
+  { title: "Right to silence vs identification", screen: "library" },
+  { title: "If you are arrested", screen: "library" },
+  { title: "Vehicle searches", screen: "library" },
+  { title: "Complaints in Queensland", screen: "complaints" },
+  { title: "QLD tenancy basics", screen: "library" },
+  { title: "Aboriginal Legal Services", screen: "aboriginal" },
+  { title: "Medicinal Cannabis", screen: "cannabis" },
+  { title: "Fine & Infringement Defence", screen: "ticket" },
+  { title: "Bail & Bond Guide", screen: "bail" },
+  { title: "Court Appearance Prep", screen: "courtprep" },
+  { title: "Estate Planning", screen: "estate" },
+  { title: "Divorce & Family Law", screen: "divorce" },
+  { title: "Business Legal", screen: "business" },
+];
+
+export const LITIGATION_INDEX: { heading: string; items: { title: string; sub: string; screen: ScreenId }[] }[] = [
+  {
+    heading: "Legal Templates",
+    items: [
+      { title: "Statutory Declaration (QLD)", sub: "Form starter", screen: "templates" },
+      { title: "Character Reference Letter", sub: "Court-ready draft", screen: "templates" },
+      { title: "Police Complaint Letter", sub: "Factual account", screen: "templates" },
+      { title: "All legal templates", sub: "Docs + e-sign", screen: "templates" },
+    ],
+  },
+  {
+    heading: "Letter & Call Register",
+    items: [
+      { title: "Letters & calls for you", sub: "Lawyer acts on your behalf", screen: "attorney" },
+      { title: "E-Sign & signing tracker", sub: "Envelopes and status", screen: "signing" },
+      { title: "Demand letter register", sub: "Sent correspondence log", screen: "attorney" },
+    ],
+  },
+  {
+    heading: "Court",
+    items: [
+      { title: "Court & deadlines", sub: "Reminders and dates", screen: "calendar" },
+      { title: "Court appearance prep", sub: "Checklist before you go", screen: "courtprep" },
+      { title: "My matters", sub: "Case tracker", screen: "matters" },
+      { title: "Fine defence", sub: "Infringements", screen: "ticket" },
+    ],
+  },
 ];
 
 export const LIBRARY = [
@@ -273,6 +324,8 @@ export const NAV_FOR_SCREEN: Record<ScreenId, "home" | "ask" | "glovebox" | "mor
   ticket: "home",
   estate: "home",
   library: "home",
+  resourcelibrary: "home",
+  litigation: "home",
   dashboard: "home",
   search: "home",
   notifications: "home",

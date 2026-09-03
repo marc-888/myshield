@@ -5,10 +5,12 @@ import {
   EXPERTS,
   GLOVEBOX_TYPES,
   LIBRARY,
+  LITIGATION_INDEX,
   MORE_LINKS,
   NOTIFICATIONS,
   PANEL,
   PLAN_ROWS,
+  RESOURCE_HEADINGS,
   RIGHTS,
   SERVICE_INDEX,
   TEMPLATES,
@@ -1409,5 +1411,61 @@ export function BailScreen() {
       cta="Connect bail lawyer now"
       action={() => go("category")}
     />
+  );
+}
+
+export function ResourceLibraryScreen() {
+  const go = useShield((s) => s.go);
+  return (
+    <div>
+      <BackHeader title="Resource Library" />
+      <p className="mb-3 text-xs text-muted">Index of headings. Tap a heading to open it.</p>
+      <div className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-elev">
+        {RESOURCE_HEADINGS.map((h) => (
+          <button
+            key={h.title}
+            type="button"
+            onClick={() => go(h.screen)}
+            className="flex w-full items-baseline justify-between gap-3 px-4 py-3 text-left"
+          >
+            <span className="text-sm font-semibold text-ink">{h.title}</span>
+            <span className="shrink-0 text-xs text-muted">→</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function LitigationScreen() {
+  const go = useShield((s) => s.go);
+  return (
+    <div>
+      <BackHeader title="Litigation" />
+      <p className="mb-3 text-xs text-muted">Templates, letter & call register, and court.</p>
+      {LITIGATION_INDEX.map((section) => (
+        <div key={section.heading} className="mb-4">
+          <div className="mb-2 px-1 text-[11px] font-semibold tracking-wide text-muted uppercase">
+            {section.heading}
+          </div>
+          <div className="divide-y divide-line overflow-hidden rounded-2xl border border-line bg-elev">
+            {section.items.map((item) => (
+              <button
+                key={item.title}
+                type="button"
+                onClick={() => go(item.screen)}
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left"
+              >
+                <div>
+                  <div className="text-sm font-semibold">{item.title}</div>
+                  <div className="text-[11px] text-muted">{item.sub}</div>
+                </div>
+                <span className="shrink-0 text-xs text-muted">→</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

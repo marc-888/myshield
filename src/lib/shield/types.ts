@@ -17,6 +17,8 @@ export type ScreenId =
   | "privacy"
   | "hotline"
   | "asklawyer"
+  | "resourcelibrary"
+  | "litigation"
   | "templates"
   | "attorney"
   | "business"
