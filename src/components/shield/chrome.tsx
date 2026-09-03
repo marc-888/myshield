@@ -147,7 +147,7 @@ function StatusBar() {
     return () => clearInterval(t);
   }, []);
   return (
-    <div className="flex items-center justify-between bg-canvas px-5 py-2 text-xs text-ink">
+    <div className="flex items-center justify-between bg-paper px-5 py-2 text-xs text-ink">
       <div className="flex items-center gap-2">
         <Wifi className="size-3" />
         <span>4G</span>
@@ -168,13 +168,13 @@ export function AppHeader() {
   const toggleTheme = useShield((s) => s.toggleTheme);
 
   return (
-    <div className="flex items-center justify-between gap-2 bg-navy-deep px-4 py-3 [--brand-gap:var(--color-navy-deep)]">
+    <div className="flex items-center justify-between gap-2 bg-paper px-4 py-3 [--brand-gap:var(--color-paper)]">
       <BrandMark />
       <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
           onClick={toggleTheme}
-          className="flex size-9 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white"
+          className="flex size-9 items-center justify-center rounded-full border border-line bg-elev text-ink"
           aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
           title={theme === "dark" ? "Light theme" : "Dark theme"}
         >
@@ -348,7 +348,7 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
     <div className="min-h-dvh bg-canvas sm:py-8">
       <div className="mx-auto max-w-[420px]">
         <div className="mb-4 hidden items-center justify-between px-3 sm:flex">
-          <div className="flex items-center gap-3 rounded-xl bg-navy-deep px-3 py-2 [--brand-gap:var(--color-navy-deep)]">
+          <div className="flex items-center gap-3 [--brand-gap:var(--color-canvas)]">
             <BrandMark size="lg" />
           </div>
           <div className="flex items-center gap-2">

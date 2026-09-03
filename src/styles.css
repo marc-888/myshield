@@ -75,10 +75,14 @@
   position: relative;
   display: inline-flex;
   align-items: baseline;
-  color: #fff;
+  color: var(--color-ink);
   line-height: 0.92;
   padding-bottom: 0.26em;
   overflow: visible;
+}
+
+html[data-theme="dark"] .brand-mark {
+  color: #fff;
 }
 
 .brand-mark::after {
@@ -110,7 +114,7 @@
   right: -0.06em;
   bottom: 0.06em;
   height: 0.32em;
-  background: var(--brand-gap, var(--color-navy-deep));
+  background: var(--brand-gap, var(--color-paper));
   z-index: -1;
 }
 
