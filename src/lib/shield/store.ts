@@ -313,7 +313,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       return;
     }
     const screen: ScreenId =
-      tab === "home" ? "home" : tab === "ask" ? "asklawyer" : tab === "glovebox" ? "glovebox" : "more";
+      tab === "home" ? "home" : tab === "ask" ? "resourcelibrary" : tab === "glovebox" ? "glovebox" : "more";
     const { screen: current, history } = get();
     set({
       nav: tab,

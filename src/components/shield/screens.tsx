@@ -1223,7 +1223,7 @@ export function ExpertsScreen() {
                 </div>
               </div>
             </div>
-            <button type="button" onClick={() => go("asklawyer")} className="text-xs font-semibold text-navy">
+            <button type="button" onClick={() => go("resourcelibrary")} className="text-xs font-semibold text-navy">
               Ask
             </button>
           </div>

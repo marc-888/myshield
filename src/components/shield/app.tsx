@@ -14,7 +14,6 @@ import { HomeScreen } from "./home";
 import {
   AboriginalScreen,
   AddonsScreen,
-  AskLawyerScreen,
   AsicScreen,
   AtoScreen,
   AttorneyScreen,
@@ -74,7 +73,7 @@ const SCREENS: Record<ScreenId, () => JSX.Element> = {
   terms: TermsScreen,
   privacy: PrivacyScreen,
   hotline: HotlineScreen,
-  asklawyer: AskLawyerScreen,
+  asklawyer: ResourceLibraryScreen,
   resourcelibrary: ResourceLibraryScreen,
   litigation: LitigationScreen,
   templates: TemplatesScreen,

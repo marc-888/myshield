@@ -1,34 +1,13 @@
-import { BookOpen, Check, Circle, Eye, Gavel, Headset, Scale, Shield, Siren, Users } from "lucide-react";
+import { BookOpen, Check, Circle, Eye, Gavel, Headset, Scale, Siren } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { HOME_TILES, PANEL } from "@/lib/shield/data";
+import { PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
-import { TILE_ICONS } from "./icons";
-
-const ASK_MOSAIC = [
-  "#3d0e16",
-  "#2a1210",
-  "#4a1218",
-  "#321016",
-  "#3a1612",
-  "#2e0c12",
-  "#48101a",
-  "#351016",
-  "#42141c",
-  "#2c1014",
-  "#4a1814",
-  "#3a1020",
-  "#2e0e12",
-  "#40141c",
-  "#36120e",
-  "#3e0c14",
-];
 
 export function HomeScreen() {
   const go = useShield((s) => s.go);
   const fireSos = useShield((s) => s.fireSos);
   const sosOpen = useShield((s) => s.sosOpen);
   const startEvidence = useShield((s) => s.startEvidence);
-  const family = useShield((s) => s.family);
   const glovebox = useShield((s) => s.glovebox);
   const contacts = useShield((s) => s.contacts);
   const activity = useShield((s) => s.activity);
@@ -134,59 +113,6 @@ export function HomeScreen() {
           </div>
         </div>
       ) : null}
-
-      <div className="mb-5 grid grid-cols-2 gap-3">
-        {HOME_TILES.map((tile, i) => {
-          const Icon = TILE_ICONS[tile.icon] ?? Shield;
-          const fill = ASK_MOSAIC[i % ASK_MOSAIC.length];
-          return (
-            <button
-              key={tile.title}
-              type="button"
-              onClick={() => go(tile.screen)}
-              className="rounded-3xl p-4 text-left text-navy-fg"
-              style={{ backgroundColor: fill }}
-            >
-              <Icon className="mb-2 size-5 text-navy-fg" />
-              <div className="text-sm font-semibold">{tile.title}</div>
-              {tile.badge ? (
-                <div className="mt-1">
-                  <span className="inline-block rounded-full bg-white px-2 py-0.5 text-[10px] font-medium text-navy">
-                    {tile.badge}
-                  </span>
-                </div>
-              ) : (
-                <div className="text-xs opacity-80">
-                  {tile.title === "Family Plan" ? `${family.length} sub-accounts` : tile.sub}
-                </div>
-              )}
-            </button>
-          );
-        })}
-        <button
-          type="button"
-          onClick={() => go("aboriginal")}
-          className="col-span-2 flex items-center gap-3 rounded-3xl p-4 text-left text-navy-fg"
-          style={{ backgroundColor: ASK_MOSAIC[1] }}
-        >
-          <Users className="size-5 text-navy-fg" />
-          <div>
-            <div className="text-sm font-semibold">Aboriginal Legal Services</div>
-            <div className="text-xs opacity-80">Free 24/7 culturally safe help — ATSILS, ALS, VALS</div>
-          </div>
-        </button>
-        <button
-          type="button"
-          onClick={() => go("services")}
-          className="col-span-2 flex items-center justify-between rounded-3xl p-4 text-left text-navy-fg"
-          style={{ backgroundColor: ASK_MOSAIC[4] }}
-        >
-          <div>
-            <div className="text-sm font-semibold">All Legal Services</div>
-            <div className="text-xs opacity-80">24 tools — Rocket Lawyer, LegalZoom, LegalShield, JustAnswer + myShield</div>
-          </div>
-        </button>
-      </div>
 
       {activity.length > 0 ? (
         <div className="mb-4 rounded-2xl border border-line bg-elev p-3 text-xs">

@@ -93,40 +93,11 @@ export const CATEGORIES: {
   },
 ];
 
-export const HOME_TILES: {
-  title: string;
-  sub: string;
-  screen: ScreenId;
-  icon: string;
-  badge?: string;
-  span?: boolean;
-  tone?: "violet" | "amber" | "navy";
-}[] = [
-  { title: "Ask a Lawyer", sub: "Chat Q&A • rated experts", screen: "asklawyer", icon: "ask" },
-  { title: "Legal Templates", sub: "Docs + e-sign • Rocket Lawyer", screen: "templates", icon: "file" },
-  { title: "Letters & Calls", sub: "Lawyer acts for you • LegalShield", screen: "attorney", icon: "mail" },
-  { title: "Business Legal", sub: "ABN, contracts • LegalZoom", screen: "business", icon: "briefcase" },
-  { title: "Shield Copilot", sub: "AI legal assistant • Rocket Lawyer", screen: "copilot", icon: "sparkles", tone: "violet" },
-  { title: "Legal Vault", sub: "Name, ID, licence", screen: "vault", icon: "vault" },
-  { title: "Court & Deadlines", sub: "Reminders • LegalZoom", screen: "calendar", icon: "calendar" },
-  { title: "Fine Defence", sub: "Infringements • LegalShield", screen: "ticket", icon: "ticket" },
-  { title: "Estate Planning", sub: "Will, POA • LegalZoom", screen: "estate", icon: "landmark" },
-  { title: "Legal Library", sub: "Guides & articles", screen: "library", icon: "book" },
-  { title: "Know Your Rights", sub: "General info only", screen: "rights", icon: "scale", badge: "General info only" },
-  { title: "Digital Glovebox", sub: "ID, licence, insurance", screen: "glovebox", icon: "folder" },
-  { title: "Emergency Contacts", sub: "SMS + location alerts", screen: "emergency", icon: "bell" },
-  { title: "Document Incident", sub: "Your personal notes", screen: "document", icon: "clipboard" },
-  { title: "Family Plan", sub: "2 sub-accounts", screen: "family", icon: "users" },
-  { title: "Make a Complaint", sub: "Official QLD channels", screen: "complaints", icon: "alert" },
-  { title: "Medicinal Cannabis", sub: "General info only", screen: "cannabis", icon: "leaf", badge: "General info only" },
-];
-
 export const SERVICE_INDEX: { name: string; screen: ScreenId; tags: string; cat: string }[] = [
   { name: "Instant Lawyer Video", screen: "category", tags: "emergency police attorney video", cat: "Emergency" },
   { name: "SOS Alert", screen: "home", tags: "sos emergency family contacts sms", cat: "Emergency" },
   { name: "Witness a Crime", screen: "witness", tags: "witness crime statement police", cat: "Emergency" },
   { name: "24/7 Legal Hotline", screen: "hotline", tags: "phone call legalshield", cat: "Emergency" },
-  { name: "Ask a Lawyer", screen: "asklawyer", tags: "chat question justanswer", cat: "Consult" },
   { name: "Resource Library", screen: "resourcelibrary", tags: "headings index guides library", cat: "Resources" },
   { name: "Litigation", screen: "litigation", tags: "templates letters court register", cat: "Court" },
   { name: "Shield Copilot AI", screen: "copilot", tags: "ai draft rocket lawyer", cat: "Consult" },
@@ -322,7 +293,7 @@ export const NAV_FOR_SCREEN: Record<ScreenId, "home" | "ask" | "glovebox" | "mor
   ticket: "home",
   estate: "home",
   library: "home",
-  resourcelibrary: "home",
+  resourcelibrary: "ask",
   litigation: "home",
   dashboard: "home",
   search: "home",
@@ -363,19 +334,8 @@ export const NAV_FOR_SCREEN: Record<ScreenId, "home" | "ask" | "glovebox" | "mor
 
 export const MORE_LINKS: { label: string; screen: ScreenId; hint?: string }[] = [
   { label: "24/7 Legal Hotline", screen: "hotline", hint: "Included" },
-  { label: "Ask a Lawyer", screen: "asklawyer", hint: "credits" },
-  { label: "Legal Templates & E-Sign", screen: "templates" },
-  { label: "Letters & Calls For You", screen: "attorney" },
-  { label: "Business Legal", screen: "business" },
-  { label: "Shield Copilot AI", screen: "copilot" },
-  { label: "Legal Vault", screen: "vault" },
-  { label: "Court & Deadlines", screen: "calendar" },
-  { label: "Fine Defence", screen: "ticket" },
-  { label: "Estate Planning", screen: "estate" },
-  { label: "Legal Library", screen: "library" },
-  { label: "Your Law Firm", screen: "provider" },
-  { label: "Supplemental Coverage", screen: "addons" },
-  { label: "Refer & Earn $25", screen: "referrals" },
+  { label: "Resource Library", screen: "resourcelibrary" },
+  { label: "Litigation", screen: "litigation" },
   { label: "Shield Credit & Plans", screen: "wallet", hint: "credit" },
   { label: "Digital Glovebox", screen: "glovebox", hint: "docs" },
   { label: "Emergency Contacts", screen: "emergency", hint: "contacts" },
