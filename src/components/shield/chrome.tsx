@@ -167,7 +167,7 @@ export function AppHeader() {
   const toggleTheme = useShield((s) => s.toggleTheme);
 
   return (
-    <div className="flex items-center justify-between gap-2 bg-paper px-4 py-3 [--brand-gap:var(--color-paper)]">
+    <div className="flex items-center justify-between gap-2 bg-paper px-4 pt-3 pb-1.5 [--brand-gap:var(--color-paper)]">
       <BrandMark />
       <div className="flex shrink-0 items-center gap-2">
         <button
@@ -384,7 +384,7 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
               Dual cam recording {recSeconds}s · tap to return
             </button>
           ) : null}
-          <div className={cn("relative min-h-[520px]", immersive ? "p-0 pb-0" : "p-5 pb-16")}>{children}</div>
+          <div className={cn("relative min-h-[520px]", immersive ? "p-0 pb-0" : "px-5 pt-2.5 pb-16")}>{children}</div>
           {!immersive ? <BottomNav /> : null}
           <SosFab />
           {recording ? <EvidenceEngine /> : null}
