@@ -48,12 +48,11 @@ export function InfoBadge({ children }: { children: ReactNode }) {
 export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const text =
     size === "lg" ? "text-5xl tracking-tighter" : size === "sm" ? "text-3xl tracking-tight" : "text-[36px] tracking-tight";
-  const rule = size === "lg" ? "border-b-[4px]" : "border-b-[3px]";
   return (
-    <div className={cn("brand-mark font-display inline-flex items-baseline leading-none text-white", text)} aria-label={APP_NAME}>
-      <span className={cn("border-sos font-medium", rule)}>m</span>
+    <div className={cn("brand-mark font-display", text)} aria-label={APP_NAME}>
+      <span className="font-medium">m</span>
       <span className="brand-y font-medium">y</span>
-      <span className={cn("border-sos", rule)}>Shield</span>
+      <span>Shield</span>
     </div>
   );
 }
@@ -169,7 +168,7 @@ export function AppHeader() {
   const toggleTheme = useShield((s) => s.toggleTheme);
 
   return (
-    <div className="flex items-center justify-between gap-2 bg-navy-deep px-4 py-3">
+    <div className="flex items-center justify-between gap-2 bg-navy-deep px-4 py-3 [--brand-gap:var(--color-navy-deep)]">
       <BrandMark />
       <div className="flex shrink-0 items-center gap-2">
         <button
@@ -349,7 +348,7 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
     <div className="min-h-dvh bg-canvas sm:py-8">
       <div className="mx-auto max-w-[420px]">
         <div className="mb-4 hidden items-center justify-between px-3 sm:flex">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-xl bg-navy-deep px-3 py-2 [--brand-gap:var(--color-navy-deep)]">
             <BrandMark size="lg" />
           </div>
           <div className="flex items-center gap-2">

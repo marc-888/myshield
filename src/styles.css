@@ -72,18 +72,46 @@
 }
 
 .brand-mark {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
   color: #fff;
-  padding-bottom: 0.18em;
-  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+  line-height: 0.92;
+  padding-bottom: 0.26em;
+  overflow: visible;
+}
+
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.2em;
+  height: 0.1em;
+  min-height: 3px;
+  background: var(--color-logo);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.brand-mark > span {
+  position: relative;
+  z-index: 1;
 }
 
 .brand-mark .brand-y {
-  padding-inline: 0.03em;
+  padding-inline: 0.04em;
 }
 
-.brand-mark > span:not(.brand-y) {
-  border-bottom-style: solid;
-  padding-bottom: 0.05em;
+.brand-mark .brand-y::after {
+  content: "";
+  position: absolute;
+  left: -0.06em;
+  right: -0.06em;
+  bottom: 0.06em;
+  height: 0.32em;
+  background: var(--brand-gap, var(--color-navy-deep));
+  z-index: -1;
 }
 
 .illum {
