@@ -23,7 +23,8 @@ export function HomeScreen() {
 
   return (
     <div>
-      <div className="mb-4 grid grid-cols-3 gap-2">
+      <div className="mb-4 flex flex-col gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <button
           type="button"
           onClick={() => go("hotline")}
@@ -54,7 +55,7 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startEvidence("attorney")}
-        className="illum illum-green mb-3 flex w-full items-center gap-4 rounded-3xl bg-witness p-4 text-left text-navy-fg"
+        className="illum illum-green flex w-full items-center gap-4 rounded-3xl bg-witness p-4 text-left text-navy-fg"
       >
         <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
           <Scale className="size-6" />
@@ -66,7 +67,7 @@ export function HomeScreen() {
         <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-witness">Live</span>
       </button>
 
-      <div className="mb-3 grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-4">
         <button
           type="button"
           onClick={() => go("resourcelibrary")}
@@ -85,6 +86,7 @@ export function HomeScreen() {
           <span className="text-sm font-semibold">Litigation</span>
           <span className="text-[11px] opacity-90">Templates • letters • court</span>
         </button>
+      </div>
       </div>
 
       {showChecklist ? (
