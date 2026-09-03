@@ -3,7 +3,7 @@
 
 @theme {
   --color-navy: #e11d2e;
-  --color-navy-deep: #b91c1c;
+  --color-navy-deep: #8f1020;
   --color-navy-fg: #ffffff;
   --color-ink: #1a1a1a;
   --color-paper: #ffffff;
@@ -12,13 +12,16 @@
   --color-muted: #6b7280;
   --color-line: #e5e5e5;
   --color-sos: #e11d2e;
-  --color-sos-deep: #9f1239;
+  --color-sos-deep: #8f1020;
   --color-sos-fg: #ffffff;
   --color-amber-glow: #e11d2e;
   --color-disclaimer: #fff1f2;
   --color-disclaimer-line: #fecaca;
   --color-disclaimer-fg: #9f1239;
-  --color-panel: #e11d2e;
+  --color-panel: #16a34a;
+  --color-hotline: #2563eb;
+  --color-witness: #16a34a;
+  --color-logo: #ff2d42;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
   --radius-phone: 2.5rem;
@@ -69,16 +72,18 @@
 }
 
 .illum {
-  --illum: var(--color-navy);
+  --illum: var(--color-navy-deep);
   filter: none;
   color: var(--color-navy-fg);
+  background-color: var(--illum);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.28),
     0 0 0 1px color-mix(in oklab, var(--illum) 45%, transparent),
     0 8px 22px color-mix(in oklab, var(--illum) 38%, transparent);
   transition:
     transform 160ms ease,
-    box-shadow 160ms ease;
+    box-shadow 160ms ease,
+    background-color 160ms ease;
 }
 
 .illum svg,
@@ -99,18 +104,31 @@
 
 .illum:active,
 .illum[aria-pressed="true"] {
+  --illum: var(--color-navy);
   filter: none;
+  background-color: var(--color-navy);
   box-shadow:
     inset 0 1px 0 rgb(255 255 255 / 0.4),
-    0 0 0 1px color-mix(in oklab, var(--illum) 65%, transparent),
-    0 8px 20px color-mix(in oklab, var(--illum) 42%, transparent);
+    0 0 0 1px color-mix(in oklab, var(--color-navy) 65%, transparent),
+    0 8px 20px color-mix(in oklab, var(--color-navy) 42%, transparent);
 }
 
 .illum-navy,
-.illum-sos,
-.illum-amber,
+.illum-sos {
+  --illum: var(--color-navy-deep);
+}
+
+.illum-blue {
+  --illum: var(--color-hotline);
+}
+
+.illum-green,
 .illum-emerald {
-  --illum: var(--color-navy);
+  --illum: var(--color-witness);
+}
+
+.illum-amber {
+  --illum: var(--color-navy-deep);
 }
 
 button.bg-navy {
@@ -118,16 +136,6 @@ button.bg-navy {
     inset 0 1px 0 rgb(255 255 255 / 0.22),
     0 0 0 1px color-mix(in oklab, var(--color-navy) 45%, transparent),
     0 6px 18px color-mix(in oklab, var(--color-navy) 32%, transparent);
-}
-
-button.bg-emerald-600,
-button.bg-amber-700,
-button.bg-amber-600,
-button.from-sos,
-button.bg-sos {
-  background-color: var(--color-navy) !important;
-  background-image: none !important;
-  color: var(--color-navy-fg) !important;
 }
 
 .health-ring {
@@ -151,8 +159,8 @@ button.bg-sos {
 }
 
 html[data-theme="dark"] {
-  --color-navy: #ef2033;
-  --color-navy-deep: #b91c1c;
+  --color-navy: #e11d2e;
+  --color-navy-deep: #6d0c18;
   --color-navy-fg: #ffffff;
   --color-ink: #f4f4f5;
   --color-paper: #121212;
@@ -160,14 +168,17 @@ html[data-theme="dark"] {
   --color-elev: #1c1c1c;
   --color-muted: #a1a1aa;
   --color-line: #2e2e2e;
-  --color-sos: #ef2033;
-  --color-sos-deep: #9f1239;
+  --color-sos: #e11d2e;
+  --color-sos-deep: #6d0c18;
   --color-sos-fg: #ffffff;
-  --color-amber-glow: #ef2033;
+  --color-amber-glow: #e11d2e;
   --color-disclaimer: #2a1012;
   --color-disclaimer-line: #7f1d1d;
   --color-disclaimer-fg: #fecaca;
-  --color-panel: #ef2033;
+  --color-panel: #22c55e;
+  --color-hotline: #3b82f6;
+  --color-witness: #22c55e;
+  --color-logo: #ff4d5e;
 }
 
 @keyframes pulse-ring {

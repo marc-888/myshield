@@ -7,6 +7,7 @@ import { TILE_ICONS } from "./icons";
 export function HomeScreen() {
   const go = useShield((s) => s.go);
   const fireSos = useShield((s) => s.fireSos);
+  const sosOpen = useShield((s) => s.sosOpen);
   const startEvidence = useShield((s) => s.startEvidence);
   const family = useShield((s) => s.family);
   const glovebox = useShield((s) => s.glovebox);
@@ -28,7 +29,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("hotline")}
-          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          className="illum illum-blue flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-hotline px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Headset className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">24/7</span>
@@ -36,7 +37,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => startEvidence("witness")}
-          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          className="illum illum-green flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-witness px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Eye className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">Witness</span>
@@ -44,7 +45,8 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={fireSos}
-          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          aria-pressed={sosOpen}
+          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy-deep px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>
@@ -54,7 +56,7 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startEvidence("attorney")}
-        className="illum illum-navy mb-3 flex w-full items-center gap-4 rounded-3xl bg-navy p-4 text-left text-navy-fg"
+        className="illum illum-green mb-3 flex w-full items-center gap-4 rounded-3xl bg-witness p-4 text-left text-navy-fg"
       >
         <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
           <Scale className="size-6" />
@@ -63,7 +65,7 @@ export function HomeScreen() {
           <div className="text-sm font-semibold">Connect to attorney</div>
           <div className="text-[11px] opacity-90">Live dual-cam · hashed GPS evidence</div>
         </div>
-        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-navy">Live</span>
+        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-witness">Live</span>
       </button>
 
       {showChecklist ? (

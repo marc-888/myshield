@@ -47,9 +47,9 @@ export function InfoBadge({ children }: { children: ReactNode }) {
 
 export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const text =
-    size === "lg" ? "text-4xl tracking-tighter" : size === "sm" ? "text-2xl tracking-tight" : "text-[28px] tracking-tight";
+    size === "lg" ? "text-5xl tracking-tighter" : size === "sm" ? "text-3xl tracking-tight" : "text-[36px] tracking-tight";
   return (
-    <div className={cn("font-display leading-none text-navy", text)} aria-label={APP_NAME}>
+    <div className={cn("font-display leading-none text-logo", text)} aria-label={APP_NAME}>
       <span className="font-medium">my</span>
       <span>Shield</span>
     </div>
@@ -235,7 +235,7 @@ export function SosFab() {
     <button
       type="button"
       onClick={fireSos}
-      className="illum illum-navy absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
+      className="illum illum-sos absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy-deep text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
       aria-label="SOS alert emergency contacts and family"
       title="SOS — alert contacts and family"
     >
