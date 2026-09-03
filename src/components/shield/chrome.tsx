@@ -235,7 +235,7 @@ export function SosFab() {
     <button
       type="button"
       onClick={fireSos}
-      className="illum illum-sos absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy-deep text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
+      className="illum illum-navy absolute right-3 bottom-16 z-20 flex size-14 flex-col items-center justify-center rounded-full bg-navy text-[10px] font-bold tracking-wide text-navy-fg active:scale-95"
       aria-label="SOS alert emergency contacts and family"
       title="SOS — alert contacts and family"
     >

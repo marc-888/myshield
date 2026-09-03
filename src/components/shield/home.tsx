@@ -46,7 +46,7 @@ export function HomeScreen() {
           type="button"
           onClick={fireSos}
           aria-pressed={sosOpen}
-          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy-deep px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
+          className="illum illum-navy flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-navy px-1 py-3 text-center text-navy-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>
@@ -103,7 +103,7 @@ export function HomeScreen() {
               key={tile.title}
               type="button"
               onClick={() => go(tile.screen)}
-              className="rounded-3xl border border-navy bg-navy p-4 text-left text-navy-fg"
+              className="rounded-3xl border border-navy-deep bg-navy-deep p-4 text-left text-navy-fg"
             >
               <Icon className="mb-2 size-5 text-navy-fg" />
               <div className="text-sm font-semibold">{tile.title}</div>
@@ -124,7 +124,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("aboriginal")}
-          className="col-span-2 flex items-center gap-3 rounded-3xl bg-navy p-4 text-left text-navy-fg"
+          className="col-span-2 flex items-center gap-3 rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
         >
           <Users className="size-5 text-navy-fg" />
           <div>
@@ -135,7 +135,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("services")}
-          className="col-span-2 flex items-center justify-between rounded-3xl bg-navy p-4 text-left text-navy-fg"
+          className="col-span-2 flex items-center justify-between rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
         >
           <div>
             <div className="text-sm font-semibold">All Legal Services</div>
