@@ -46,10 +46,9 @@ export function InfoBadge({ children }: { children: ReactNode }) {
 }
 
 export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const text =
-    size === "lg" ? "text-5xl tracking-tighter" : size === "sm" ? "text-3xl tracking-tight" : "text-[36px] tracking-tight";
+  const sizeClass = size === "lg" ? "brand-mark-lg tracking-tighter" : size === "sm" ? "brand-mark-sm tracking-tight" : "tracking-tight";
   return (
-    <div className={cn("brand-mark font-display", text)} aria-label={APP_NAME}>
+    <div className={cn("brand-mark font-display", sizeClass)} aria-label={APP_NAME}>
       <span className="font-medium">m</span>
       <span className="brand-y font-medium">y</span>
       <span>Shield</span>

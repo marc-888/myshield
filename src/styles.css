@@ -41,6 +41,10 @@
     color-scheme: light;
   }
 
+  html {
+    font-size: 18px;
+  }
+
   html[data-theme="dark"],
   html[data-theme="dark"] body {
     color-scheme: dark;
@@ -76,9 +80,18 @@
   display: inline-flex;
   align-items: baseline;
   color: var(--color-ink);
+  font-size: 36px;
   line-height: 0.92;
   padding-bottom: 0.26em;
   overflow: visible;
+}
+
+.brand-mark-sm {
+  font-size: 28px;
+}
+
+.brand-mark-lg {
+  font-size: 48px;
 }
 
 html[data-theme="dark"] .brand-mark {
@@ -274,6 +287,19 @@ html[data-theme="dark"] {
   50% {
     opacity: 0;
   }
+}
+
+.text-\[8px\] {
+  font-size: 10px !important;
+}
+.text-\[9px\] {
+  font-size: 11px !important;
+}
+.text-\[10px\] {
+  font-size: 12px !important;
+}
+.text-\[11px\] {
+  font-size: 13px !important;
 }
 
 .slide-down {
