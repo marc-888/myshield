@@ -20,7 +20,7 @@
   --color-disclaimer-fg: #9f1239;
   --color-panel: #16a34a;
   --color-hotline: #2563eb;
-  --color-witness: #16a34a;
+  --color-witness: #15803d;
   --color-logo: #ff2d42;
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
@@ -177,7 +177,7 @@ html[data-theme="dark"] {
   --color-disclaimer-fg: #fecaca;
   --color-panel: #22c55e;
   --color-hotline: #3b82f6;
-  --color-witness: #22c55e;
+  --color-witness: #166534;
   --color-logo: #ff4d5e;
 }
 
