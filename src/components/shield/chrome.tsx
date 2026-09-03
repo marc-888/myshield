@@ -48,10 +48,12 @@ export function InfoBadge({ children }: { children: ReactNode }) {
 export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
   const text =
     size === "lg" ? "text-5xl tracking-tighter" : size === "sm" ? "text-3xl tracking-tight" : "text-[36px] tracking-tight";
+  const rule = size === "lg" ? "border-b-[4px]" : "border-b-[3px]";
   return (
-    <div className={cn("font-display leading-none text-logo", text)} aria-label={APP_NAME}>
-      <span className="font-medium">my</span>
-      <span>Shield</span>
+    <div className={cn("brand-mark font-display inline-flex items-baseline leading-none text-white", text)} aria-label={APP_NAME}>
+      <span className={cn("border-sos font-medium", rule)}>m</span>
+      <span className="brand-y font-medium">y</span>
+      <span className={cn("border-sos", rule)}>Shield</span>
     </div>
   );
 }
@@ -167,13 +169,13 @@ export function AppHeader() {
   const toggleTheme = useShield((s) => s.toggleTheme);
 
   return (
-    <div className="flex items-center justify-between gap-2 bg-paper px-4 py-3">
+    <div className="flex items-center justify-between gap-2 bg-navy-deep px-4 py-3">
       <BrandMark />
       <div className="flex shrink-0 items-center gap-2">
         <button
           type="button"
           onClick={toggleTheme}
-          className="flex size-9 items-center justify-center rounded-full border border-line bg-elev text-ink"
+          className="flex size-9 items-center justify-center rounded-full border border-white/35 bg-white/10 text-white"
           aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
           title={theme === "dark" ? "Light theme" : "Dark theme"}
         >
