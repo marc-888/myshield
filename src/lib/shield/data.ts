@@ -44,6 +44,104 @@ export const PANEL = [
   },
 ];
 
+export const LAW_ADS: {
+  id: string;
+  kicker: string;
+  firm: string;
+  lawyer: string;
+  headline: string;
+  body: string;
+  proof: string;
+  hours: string;
+  cta: string;
+  tone: "crimson" | "ink" | "cream" | "navy" | "forest" | "slate";
+}[] = [
+  {
+    id: "sharma",
+    kicker: "Criminal defence · Gold Coast",
+    firm: "Gold Coast Criminal Law Group",
+    lawyer: "Dr Priya Sharma · Principal",
+    headline: "Speak to us before you speak to anyone else.",
+    body: "Street stops, interviews, bail and drug-driving. Independent chambers. Not employed by myShield. Fictitious ad for this demo only.",
+    proof: "QLD #S1234567 (demo) · 4.9★ · 312 reviews",
+    hours: "Night desk 24/7",
+    cta: "Request Dr Sharma",
+    tone: "crimson",
+  },
+  {
+    id: "morrow",
+    kicker: "Traffic & licence appeals",
+    firm: "Morrow Traffic Defence",
+    lawyer: "James Morrow · Solicitor",
+    headline: "RBT. Saliva. Show-cause. We live in this lane.",
+    body: "QLD roadside testing, disqualification, and work-licence applications. Written advice the same day in production. Mock advertisement only.",
+    proof: "QLD #S445512 (demo) · 4.8★ · 201 reviews",
+    hours: "Surfers · Southport registry",
+    cta: "Book a traffic consult",
+    tone: "navy",
+  },
+  {
+    id: "keene",
+    kicker: "Bail & complaints",
+    firm: "Keene Criminal Chambers",
+    lawyer: "Tom Keene · Barrister",
+    headline: "If you are in custody, start here.",
+    body: "Bail applications, police-complaint strategy, and first mentions. We take the call so your family does not have to guess. Demo creative only.",
+    proof: "QLD #S778823 (demo) · 4.7★ · 156 reviews",
+    hours: "On call to the watch-house",
+    cta: "Call chambers",
+    tone: "ink",
+  },
+  {
+    id: "northcliffe",
+    kicker: "Family & parenting",
+    firm: "Northcliffe Family Law",
+    lawyer: "Aisha Rahman · Director",
+    headline: "Parenting plans with less heat, more paper.",
+    body: "Separation, consent orders, and urgent recovery. Gold Coast and Brisbane by video. Not a real firm — stylised mockup for myShield.",
+    proof: "Family law panel (demo) · 4.9★",
+    hours: "Weekdays 7am–7pm",
+    cta: "Start a family file",
+    tone: "cream",
+  },
+  {
+    id: "harbour",
+    kicker: "Business, ABN & contracts",
+    firm: "Harbourfront Legal",
+    lawyer: "Ben Walsh · Partner",
+    headline: "The firm on the letterhead your suppliers already trust.",
+    body: "ABN, contractor agreements, leases, and ASIC mail. Fictitious Brisbane harbour practice created for this prototype.",
+    proof: "Commercial panel (demo) · 4.6★",
+    hours: "Eagle Street · by appointment",
+    cta: "Send a contract",
+    tone: "slate",
+  },
+  {
+    id: "nightdesk",
+    kicker: "24/7 duty lawyers",
+    firm: "Night Desk QLD",
+    lawyer: "Duty solicitor roster",
+    headline: "Someone answers at 2:13am.",
+    body: "Independent after-hours criminal roster covering Gold Coast, Logan and Brisbane. Public advertisement mockup — not a real service.",
+    proof: "Average pickup < 2 min (demo)",
+    hours: "Every night, including public holidays",
+    cta: "Wake the night desk",
+    tone: "forest",
+  },
+  {
+    id: "redsand",
+    kicker: "First Nations legal help",
+    firm: "Redsand Community Law",
+    lawyer: "Community panel · culturally safe",
+    headline: "Your story. Your mob. Your lawyer.",
+    body: "Criminal, family and complaints support with First Nations solicitors on the roster. Fictitious community practice for mockup only — not ATSILS or ALS.",
+    proof: "Culturally safe panel (demo)",
+    hours: "24/7 referral line",
+    cta: "Ask for Redsand",
+    tone: "crimson",
+  },
+];
+
 export const CATEGORIES: {
   id: CategoryId;
   title: string;

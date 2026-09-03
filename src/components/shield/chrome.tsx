@@ -359,7 +359,7 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
     if (!from || !canSwipeBack) return;
     const dx = e.clientX - from.x;
     const dy = e.clientY - from.y;
-    if (dx > 80 && Math.abs(dy) < 72 && dx > Math.abs(dy)) back();
+    if (dx > 80 && Math.abs(dy) < 72 && dx > Math.abs(dy) && from.x < 56) back();
   };
 
   return (
