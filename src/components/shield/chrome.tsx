@@ -8,8 +8,9 @@ import {
   MessageSquare,
   FolderClosed,
   Ellipsis,
-  Shield,
+  Moon,
   Siren,
+  Sun,
   Wifi,
 } from "lucide-react";
 import { APP_NAME, DEMO_PIN } from "@/lib/shield/data";
@@ -45,18 +46,12 @@ export function InfoBadge({ children }: { children: ReactNode }) {
 }
 
 export function BrandMark({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const text = size === "lg" ? "text-3xl tracking-tighter" : "text-xl tracking-tight";
-  const box = size === "lg" ? "size-10 rounded-2xl" : "size-8 rounded-xl";
-  const glyph = size === "lg" ? "size-5" : "size-4";
+  const text =
+    size === "lg" ? "text-4xl tracking-tighter" : size === "sm" ? "text-2xl tracking-tight" : "text-[28px] tracking-tight";
   return (
-    <div className="flex items-center justify-center gap-2">
-      <div className={cn("illum illum-navy flex items-center justify-center bg-navy text-navy-fg", box)}>
-        <Shield className={glyph} />
-      </div>
-      <div className={cn("font-display text-navy", text)} aria-label={APP_NAME}>
-        <span className="font-medium">my</span>
-        <span>Shield</span>
-      </div>
+    <div className={cn("font-display leading-none text-navy", text)} aria-label={APP_NAME}>
+      <span className="font-medium">my</span>
+      <span>Shield</span>
     </div>
   );
 }
@@ -168,19 +163,30 @@ function StatusBar() {
 export function AppHeader() {
   const go = useShield((s) => s.go);
   const wallet = useShield((s) => s.wallet);
+  const theme = useShield((s) => s.theme);
+  const toggleTheme = useShield((s) => s.toggleTheme);
 
   return (
-    <div className="relative bg-paper px-5 py-3">
-      <button
-        type="button"
-        onClick={() => go("wallet")}
-        className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-navy px-2.5 py-1 text-sm font-semibold tabular-nums text-navy-fg"
-        aria-label="Shield Credit"
-      >
-        {formatMoney(wallet)}
-      </button>
-      <div className="flex items-center justify-center">
-        <BrandMark />
+    <div className="flex items-center justify-between gap-2 bg-paper px-4 py-3">
+      <BrandMark />
+      <div className="flex shrink-0 items-center gap-2">
+        <button
+          type="button"
+          onClick={toggleTheme}
+          className="flex size-9 items-center justify-center rounded-full border border-line bg-elev text-ink"
+          aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          title={theme === "dark" ? "Light theme" : "Dark theme"}
+        >
+          {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+        </button>
+        <button
+          type="button"
+          onClick={() => go("wallet")}
+          className="rounded-full bg-navy px-2.5 py-1 text-sm font-semibold tabular-nums text-navy-fg"
+          aria-label="Shield Credit"
+        >
+          {formatMoney(wallet)}
+        </button>
       </div>
     </div>
   );
@@ -329,7 +335,13 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
   const screen = useShield((s) => s.screen);
   const recording = useShield((s) => s.recording);
   const recSeconds = useShield((s) => s.recSeconds);
+  const theme = useShield((s) => s.theme);
   const immersive = screen === "hit" || screen === "call";
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
 
   return (
     <div className="min-h-dvh bg-canvas sm:py-8">

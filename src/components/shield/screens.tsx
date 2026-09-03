@@ -1270,6 +1270,8 @@ export function MoreScreen() {
   const credits = useShield((s) => s.askCredits);
   const glovebox = useShield((s) => s.glovebox);
   const contacts = useShield((s) => s.contacts);
+  const theme = useShield((s) => s.theme);
+  const setTheme = useShield((s) => s.setTheme);
   const hint = (h?: string) => {
     if (h === "credit") return formatMoney(wallet);
     if (h === "credits") return `${credits} credits left`;
@@ -1280,6 +1282,29 @@ export function MoreScreen() {
   return (
     <div>
       <div className="mb-4 text-lg font-semibold">More</div>
+      <div className="mb-4 rounded-2xl border border-line bg-elev p-3">
+        <div className="mb-2 text-xs font-semibold text-ink">Appearance</div>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setTheme("light")}
+            className={`rounded-xl px-3 py-2.5 text-sm font-semibold ${
+              theme === "light" ? "bg-navy text-navy-fg" : "border border-line bg-paper text-ink"
+            }`}
+          >
+            Light
+          </button>
+          <button
+            type="button"
+            onClick={() => setTheme("dark")}
+            className={`rounded-xl px-3 py-2.5 text-sm font-semibold ${
+              theme === "dark" ? "bg-navy text-navy-fg" : "border border-line bg-paper text-ink"
+            }`}
+          >
+            Dark
+          </button>
+        </div>
+      </div>
       <div className="space-y-2">
         {MORE_LINKS.map((l) => (
           <button

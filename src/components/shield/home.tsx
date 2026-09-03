@@ -51,10 +51,25 @@ export function HomeScreen() {
         </button>
       </div>
 
+      <button
+        type="button"
+        onClick={() => startEvidence("attorney")}
+        className="illum illum-navy mb-3 flex w-full items-center gap-4 rounded-3xl bg-navy p-4 text-left text-navy-fg"
+      >
+        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+          <Scale className="size-6" />
+        </div>
+        <div className="flex-1">
+          <div className="text-sm font-semibold">Connect to attorney</div>
+          <div className="text-[11px] opacity-90">Live dual-cam · hashed GPS evidence</div>
+        </div>
+        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-navy">Live</span>
+      </button>
+
       {showChecklist ? (
         <div className="mb-4 rounded-2xl border border-line bg-elev p-3">
           <div className="mb-2 text-xs font-semibold text-ink">
-            Setup checklist <span className="text-panel">{doneCount}/{setup.length}</span>
+            Setup checklist <span className="text-navy">{doneCount}/{setup.length}</span>
           </div>
           <div className="grid grid-cols-1 gap-1.5 text-[10px]">
             {setup.map((item) => (
@@ -77,21 +92,6 @@ export function HomeScreen() {
           </div>
         </div>
       ) : null}
-
-      <button
-        type="button"
-        onClick={() => startEvidence("attorney")}
-        className="illum illum-navy mb-3 flex w-full items-center gap-4 rounded-3xl bg-navy p-4 text-left text-navy-fg"
-      >
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
-          <Scale className="size-6" />
-        </div>
-        <div className="flex-1">
-          <div className="text-sm font-semibold">Connect to attorney</div>
-          <div className="text-[11px] opacity-80">Live dual-cam · hashed GPS evidence</div>
-        </div>
-        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-navy">Live</span>
-      </button>
 
       <div className="mb-5 grid grid-cols-2 gap-3">
         {HOME_TILES.map((tile) => {

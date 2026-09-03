@@ -38,6 +38,11 @@
     color-scheme: light;
   }
 
+  html[data-theme="dark"],
+  html[data-theme="dark"] body {
+    color-scheme: dark;
+  }
+
   body {
     font-family: var(--font-sans);
     background: var(--color-canvas);
@@ -65,32 +70,40 @@
 
 .illum {
   --illum: var(--color-navy);
-  filter: brightness(0.58) saturate(0.92);
+  filter: none;
+  color: var(--color-navy-fg);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.12),
-    0 0 0 1px color-mix(in oklab, var(--illum) 26%, transparent),
-    0 3px 10px color-mix(in oklab, var(--illum) 16%, transparent);
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    0 0 0 1px color-mix(in oklab, var(--illum) 45%, transparent),
+    0 8px 22px color-mix(in oklab, var(--illum) 38%, transparent);
   transition:
-    filter 160ms ease,
+    transform 160ms ease,
     box-shadow 160ms ease;
+}
+
+.illum svg,
+.illum span {
+  color: inherit;
+  opacity: 1;
+  filter: none;
 }
 
 .illum:hover,
 .illum:focus-visible {
-  filter: brightness(0.82) saturate(1);
+  filter: none;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.2),
-    0 0 0 1px color-mix(in oklab, var(--illum) 42%, transparent),
-    0 6px 16px color-mix(in oklab, var(--illum) 28%, transparent);
+    inset 0 1px 0 rgb(255 255 255 / 0.34),
+    0 0 0 1px color-mix(in oklab, var(--illum) 55%, transparent),
+    0 10px 26px color-mix(in oklab, var(--illum) 46%, transparent);
 }
 
 .illum:active,
 .illum[aria-pressed="true"] {
-  filter: brightness(1) saturate(1.05);
+  filter: none;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.28),
-    0 0 0 1px color-mix(in oklab, var(--illum) 55%, transparent),
-    0 8px 22px color-mix(in oklab, var(--illum) 42%, transparent);
+    inset 0 1px 0 rgb(255 255 255 / 0.4),
+    0 0 0 1px color-mix(in oklab, var(--illum) 65%, transparent),
+    0 8px 20px color-mix(in oklab, var(--illum) 42%, transparent);
 }
 
 .illum-navy,
@@ -118,10 +131,10 @@ button.bg-sos {
 }
 
 .health-ring {
-  background: conic-gradient(#e11d2e 0% 72%, #f4f4f5 72% 100%);
+  background: conic-gradient(var(--color-navy) 0% 72%, var(--color-line) 72% 100%);
   border-radius: 9999px;
   padding: 4px;
-  box-shadow: 0 0 16px rgb(225 29 46 / 0.28);
+  box-shadow: 0 0 16px color-mix(in oklab, var(--color-navy) 28%, transparent);
 }
 
 .health-ring-inner {
@@ -134,7 +147,27 @@ button.bg-sos {
   justify-content: center;
   font-size: 0.7rem;
   font-weight: 700;
-  color: #e11d2e;
+  color: var(--color-navy);
+}
+
+html[data-theme="dark"] {
+  --color-navy: #ef2033;
+  --color-navy-deep: #b91c1c;
+  --color-navy-fg: #ffffff;
+  --color-ink: #f4f4f5;
+  --color-paper: #121212;
+  --color-canvas: #070707;
+  --color-elev: #1c1c1c;
+  --color-muted: #a1a1aa;
+  --color-line: #2e2e2e;
+  --color-sos: #ef2033;
+  --color-sos-deep: #9f1239;
+  --color-sos-fg: #ffffff;
+  --color-amber-glow: #ef2033;
+  --color-disclaimer: #2a1012;
+  --color-disclaimer-line: #7f1d1d;
+  --color-disclaimer-fg: #fecaca;
+  --color-panel: #ef2033;
 }
 
 @keyframes pulse-ring {
@@ -263,7 +296,7 @@ button.bg-sos {
 @media (prefers-reduced-motion: reduce) {
   .illum,
   button.bg-navy {
-    filter: brightness(0.7);
+    filter: none;
     box-shadow:
       inset 0 1px 0 rgb(255 255 255 / 0.12),
       0 0 0 1px color-mix(in oklab, var(--illum, var(--color-navy)) 30%, transparent);
@@ -271,7 +304,7 @@ button.bg-sos {
 
   .illum:active,
   .illum[aria-pressed="true"] {
-    filter: brightness(1);
+    filter: none;
   }
 
   .pulse-ring,

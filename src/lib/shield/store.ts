@@ -30,6 +30,7 @@ const LS = {
   family: "shieldau_family",
   vault: "shieldau_vault",
   alerts: "shieldau_emergency_alerts",
+  theme: "myshield_theme",
 };
 
 function readJson<T>(key: string, fallback: T): T {
@@ -118,6 +119,7 @@ export type ShieldState = {
   rearLive: boolean;
   frontLive: boolean;
   dualCamMode: DualCamMode;
+  theme: "light" | "dark";
   hydrate: () => void;
   acceptTerms: () => void;
   go: (screen: ScreenId) => void;
@@ -171,6 +173,8 @@ export type ShieldState = {
   pushChunk: (chunk: EvidenceChunk) => void;
   markCloud: (seq: number) => void;
   setCamerasLive: (rear: boolean, front: boolean, mode?: DualCamMode) => void;
+  setTheme: (theme: "light" | "dark") => void;
+  toggleTheme: () => void;
 };
 
 export const useShield = create<ShieldState>((set, get) => ({
@@ -234,10 +238,13 @@ export const useShield = create<ShieldState>((set, get) => ({
   rearLive: false,
   frontLive: false,
   dualCamMode: "none",
+  theme: "light",
 
   hydrate: () => {
     if (get().hydrated) return;
     const walletRaw = typeof window !== "undefined" ? localStorage.getItem(LS.wallet) : null;
+    const themeRaw = typeof window !== "undefined" ? localStorage.getItem(LS.theme) : null;
+    const theme = themeRaw === "dark" ? "dark" : "light";
     set({
       hydrated: true,
       termsAccepted: typeof window !== "undefined" && localStorage.getItem(LS.terms) === "true",
@@ -247,6 +254,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       family: readJson(LS.family, DEFAULT_FAMILY),
       vault: readJson(LS.vault, DEFAULT_VAULT),
       alertsEnabled: typeof window === "undefined" || localStorage.getItem(LS.alerts) !== "false",
+      theme,
     });
   },
 
@@ -633,4 +641,13 @@ export const useShield = create<ShieldState>((set, get) => ({
       camerasLive: rear || front,
       dualCamMode: mode ?? (rear && front ? "concurrent" : "none"),
     }),
+  setTheme: (theme) => {
+    localStorage.setItem(LS.theme, theme);
+    set({ theme });
+  },
+  toggleTheme: () => {
+    const theme = get().theme === "dark" ? "light" : "dark";
+    localStorage.setItem(LS.theme, theme);
+    set({ theme });
+  },
 }));
