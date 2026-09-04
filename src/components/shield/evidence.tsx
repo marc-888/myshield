@@ -507,8 +507,8 @@ function WitnessRoster({
       kind: "lawyer" as const,
       id: l.id,
       photo: l.photo,
-      title: l.name,
-      sub: l.firm,
+      title: "Lawyer",
+      sub: l.name,
     }));
   const witnessSeats = approvedWitnesses
     .map((id) => REGISTERED_WITNESSES.find((w) => w.id === id))
@@ -518,7 +518,7 @@ function WitnessRoster({
       kind: "witness" as const,
       id: w.id,
       photo: w.photo,
-      title: w.nick,
+      title: "Witness",
       sub: w.name,
     }));
   const seats = [...lawyerSeats, ...witnessSeats];
