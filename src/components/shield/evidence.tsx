@@ -239,7 +239,7 @@ export function HitScreen() {
         : "Witness recording";
 
   return (
-    <div className="flex min-h-[560px] flex-col bg-ink text-navy-fg">
+    <div className="flex min-h-[560px] flex-col bg-paper text-ink">
       <div className={`relative overflow-hidden ${mode === "witness" || mode === "sos" ? "min-h-[240px] flex-none" : "min-h-[420px] flex-1"}`}>
         <video
           id="shield-rear-cam"
@@ -272,7 +272,7 @@ export function HitScreen() {
           <button
             type="button"
             onClick={() => setTorchUser(torchUserOff ? "auto" : torchOn ? "off" : "on")}
-            className="flex size-11 items-center justify-center rounded-full bg-ink/60"
+            className="flex size-11 items-center justify-center rounded-full bg-ink/60 text-white"
             aria-label="Toggle torch"
           >
             {torchOn ? <Flashlight className="size-5 text-amber-300" /> : <FlashlightOff className="size-5" />}
@@ -387,28 +387,28 @@ export function HitScreen() {
         </div>
       </div>
 
-      <div className="space-y-2 bg-zinc-950 p-3 pb-4">
+      <div className="space-y-2 bg-canvas p-3 pb-4">
         {mode === "witness" || mode === "sos" ? (
           <WitnessRoster hideUntilSelected={mode === "sos"} />
         ) : null}
 
         {mode === "attorney" && callActive ? (
-          <p className="text-[10px] text-zinc-400">
+          <p className="text-[10px] text-muted">
             Lawyer is watching both cameras and the hashed GPS feed in real time. If they hang up,
             recording keeps going. If you end it, everything is saved.
           </p>
         ) : null}
 
         <div className="grid grid-cols-3 gap-2">
-          <div className="rounded-xl bg-zinc-800 px-2 py-2 text-center text-[9px]">
+          <div className="rounded-xl border border-line bg-elev px-2 py-2 text-center text-[9px] text-ink">
             <Sun className="mx-auto mb-0.5 size-3" />
             {night ? "Night" : "Day"}
           </div>
-          <div className="rounded-xl bg-zinc-800 px-2 py-2 text-center text-[9px]">
+          <div className="rounded-xl border border-line bg-elev px-2 py-2 text-center text-[9px] text-ink">
             <CloudUpload className="mx-auto mb-0.5 size-3" />
             {cloudN} backed up
           </div>
-          <div className="rounded-xl bg-zinc-800 px-2 py-2 text-center text-[9px]">
+          <div className="rounded-xl border border-line bg-elev px-2 py-2 text-center text-[9px] text-ink">
             <Lock className="mx-auto mb-0.5 size-3" />
             {chunks.length} chunks
           </div>
@@ -419,7 +419,7 @@ export function HitScreen() {
             <button
               type="button"
               onClick={lawyerHangUp}
-              className="flex items-center justify-center gap-1 rounded-2xl bg-zinc-800 py-3 text-[11px] font-semibold text-zinc-200"
+              className="flex items-center justify-center gap-1 rounded-2xl border border-line bg-elev py-3 text-[11px] font-semibold text-ink"
             >
               <PhoneOff className="size-3" /> Lawyer hangs up
             </button>
@@ -443,7 +443,7 @@ export function HitScreen() {
           <button
             type="button"
             onClick={() => (callActive ? openPin() : stopEvidence())}
-            className="flex items-center justify-center gap-2 rounded-2xl bg-elev py-3 text-sm font-semibold text-ink"
+            className="flex items-center justify-center gap-2 rounded-2xl border border-line bg-elev py-3 text-sm font-semibold text-ink"
           >
             <Square className="size-3 fill-current" /> {callActive ? "End & save" : "Stop & save"}
           </button>
@@ -461,7 +461,7 @@ function Stars({ rating }: { rating: number }) {
       {Array.from({ length: 5 }, (_, i) => (
         <Star
           key={i}
-          className={`size-3 ${i < rating ? "fill-amber-400 text-amber-400" : "text-zinc-600"}`}
+          className={`size-3 ${i < rating ? "fill-amber-400 text-amber-400" : "text-muted"}`}
         />
       ))}
     </span>
@@ -472,7 +472,7 @@ function WitnessAvatar({ src, alt, className }: { src: string; alt: string; clas
   const [failed, setFailed] = useState(false);
   if (failed) {
     return (
-      <div className={`flex items-center justify-center bg-zinc-700 text-[10px] font-bold ${className ?? ""}`}>
+      <div className={`flex items-center justify-center bg-elev text-[10px] font-bold text-ink ${className ?? ""}`}>
         {alt.slice(0, 2).toUpperCase()}
       </div>
     );
@@ -499,11 +499,11 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
   return (
     <div className="space-y-2">
       {showGrid ? (
-        <div className="relative overflow-hidden rounded-2xl bg-zinc-900">
+        <div className="relative overflow-hidden rounded-2xl border border-line bg-elev">
           {expandedWitness ? (
             <button
               type="button"
-              className="relative block aspect-video w-full bg-zinc-950"
+              className="relative block aspect-video w-full bg-paper"
               onClick={() => setExpanded(null)}
               aria-label={`Close ${expandedWitness.name} preview`}
             >
@@ -512,9 +512,9 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
                 alt={expandedWitness.name}
                 className="absolute inset-0 size-full"
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 text-left">
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 text-left text-white">
                 <div className="text-sm font-semibold">{expandedWitness.name}</div>
-                <div className="text-[11px] text-zinc-300">@{expandedWitness.nick}</div>
+                <div className="text-[11px] text-white/80">@{expandedWitness.nick}</div>
               </div>
             </button>
           ) : hideUntilSelected ? (
@@ -524,12 +524,12 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
                   key={w.id}
                   type="button"
                   onClick={() => setExpanded(w.id)}
-                  className="overflow-hidden rounded-xl bg-zinc-800 text-left"
+                  className="overflow-hidden rounded-xl border border-line bg-canvas text-left"
                 >
                   <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
                   <div className="px-1.5 py-1">
-                    <div className="truncate text-[10px] font-semibold">{w.nick}</div>
-                    <div className="truncate text-[9px] text-zinc-400">{w.name}</div>
+                    <div className="truncate text-[10px] font-semibold text-ink">{w.nick}</div>
+                    <div className="truncate text-[9px] text-muted">{w.name}</div>
                   </div>
                 </button>
               ))}
@@ -542,7 +542,7 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
                   return (
                     <div
                       key={`empty-${i}`}
-                      className="flex aspect-square flex-col items-center justify-center rounded-xl border border-dashed border-zinc-700 bg-zinc-950/60 text-[9px] text-zinc-600"
+                      className="flex aspect-square flex-col items-center justify-center rounded-xl border border-dashed border-line bg-canvas text-[9px] text-muted"
                     >
                       Empty
                     </div>
@@ -553,12 +553,12 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
                     key={w.id}
                     type="button"
                     onClick={() => setExpanded(w.id)}
-                    className="overflow-hidden rounded-xl bg-zinc-800 text-left"
+                    className="overflow-hidden rounded-xl border border-line bg-canvas text-left"
                   >
                     <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
                     <div className="px-1.5 py-1">
-                      <div className="truncate text-[10px] font-semibold">{w.nick}</div>
-                      <div className="truncate text-[9px] text-zinc-400">{w.name}</div>
+                      <div className="truncate text-[10px] font-semibold text-ink">{w.nick}</div>
+                      <div className="truncate text-[9px] text-muted">{w.name}</div>
                     </div>
                   </button>
                 );
@@ -569,7 +569,7 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
       ) : null}
 
       {full ? null : (
-        <div className="max-h-40 overflow-y-auto rounded-2xl bg-zinc-900">
+        <div className="max-h-40 overflow-y-auto rounded-2xl border border-line bg-elev">
           {pool.map((w) => (
             <button
               key={w.id}
@@ -577,12 +577,12 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
               onClick={() =>
                 setApproved((ids) => (ids.includes(w.id) || ids.length >= 6 ? ids : [...ids, w.id]))
               }
-              className="flex w-full items-center gap-3 border-b border-zinc-800 px-3 py-2 text-left last:border-b-0"
+              className="flex w-full items-center gap-3 border-b border-line px-3 py-2 text-left last:border-b-0"
             >
               <WitnessAvatar src={w.photo} alt={w.name} className="size-9 shrink-0 rounded-full" />
               <div className="min-w-0 flex-1">
-                <div className="truncate text-xs font-semibold">{w.name}</div>
-                <div className="text-[10px] text-zinc-400">@{w.nick}</div>
+                <div className="truncate text-xs font-semibold text-ink">{w.name}</div>
+                <div className="text-[10px] text-muted">@{w.nick}</div>
               </div>
               <Stars rating={w.rating} />
             </button>
