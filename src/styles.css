@@ -187,6 +187,29 @@ html[data-theme="dark"] .brand-mark {
   background-color: #fff;
 }
 
+.illum-gold {
+  --illum: #d4a017;
+  color: #111;
+  background-color: #d4a017;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.4),
+    0 0 0 1px color-mix(in oklab, #d4a017 55%, transparent),
+    0 8px 22px color-mix(in oklab, #d4a017 38%, transparent);
+}
+
+.illum-gold:hover,
+.illum-gold:focus-visible {
+  color: #111;
+  background-color: #d4a017;
+}
+
+.illum-gold:active,
+.illum-gold[aria-pressed="true"] {
+  --illum: #d4a017;
+  color: #111;
+  background-color: #d4a017;
+}
+
 .illum-green,
 .illum-emerald {
   --illum: var(--color-witness);
