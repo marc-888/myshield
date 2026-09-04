@@ -495,6 +495,10 @@ function WitnessRoster({
   showLawyerTab?: boolean;
 }) {
   const [tab, setTab] = useState<"witnesses" | "lawyers">("witnesses");
+  const sosRosterTab = useShield((s) => s.sosRosterTab);
+  useEffect(() => {
+    if (showLawyerTab) setTab(sosRosterTab);
+  }, [showLawyerTab, sosRosterTab]);
   const [approvedLawyers, setApprovedLawyers] = useState<string[]>([]);
   const [approvedWitnesses, setApprovedWitnesses] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<{ kind: "lawyer" | "witness"; id: string } | null>(null);

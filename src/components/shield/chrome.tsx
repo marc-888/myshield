@@ -252,9 +252,7 @@ export function SosOverlay() {
   const sosHits = useShield((s) => s.sosHits);
   const sosAt = useShield((s) => s.sosAt);
   const closeSos = useShield((s) => s.closeSos);
-  const setCategory = useShield((s) => s.setCategory);
-  const startMatch = useShield((s) => s.startMatch);
-  const gps = useShield((s) => s.gps);
+  const setSosRosterTab = useShield((s) => s.setSosRosterTab);
   const contacts = sosHits.filter((h) => h.kind === "contact");
   const family = sosHits.filter((h) => h.kind === "family");
 
@@ -269,15 +267,8 @@ export function SosOverlay() {
           </div>
           <div>
             <div className="text-lg font-semibold text-sos">SOS sent</div>
-            <div className="text-[11px] text-muted">
-              {sosAt} ·{" "}
-              {gps ? `${gps.lat.toFixed(5)}, ${gps.lng.toFixed(5)}` : "Gold Coast, QLD (demo location)"}
-            </div>
+            {sosAt ? <div className="text-[11px] text-muted">{sosAt}</div> : null}
           </div>
-        </div>
-        <div className="mb-3 rounded-2xl border border-sos/40 bg-sos/10 p-3 text-[11px] text-rose-100">
-          If you are in immediate danger, call <strong>Triple Zero (000)</strong>. This demo alerts
-          your people — it does not dispatch police.
         </div>
         <div className="mb-3">
           <div className="mb-1 text-xs font-semibold text-ink">Emergency contacts</div>
@@ -311,13 +302,12 @@ export function SosOverlay() {
         <button
           type="button"
           onClick={() => {
+            setSosRosterTab("lawyers");
             closeSos();
-            setCategory("criminal");
-            startMatch();
           }}
           className="mb-2 w-full rounded-2xl bg-navy py-3 text-sm font-semibold text-navy-fg"
         >
-          Also connect to attorney
+          Connect to lawyer
         </button>
         <button
           type="button"

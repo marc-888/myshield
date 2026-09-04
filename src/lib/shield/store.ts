@@ -111,6 +111,7 @@ export type ShieldState = {
   sosOpen: boolean;
   sosHits: SosHit[];
   sosAt: string | null;
+  sosRosterTab: "witnesses" | "lawyers";
   evidenceMode: EvidenceMode | null;
   recording: boolean;
   recSeconds: number;
@@ -171,6 +172,7 @@ export type ShieldState = {
   logActivity: (text: string) => void;
   fireSos: () => void;
   closeSos: () => void;
+  setSosRosterTab: (tab: "witnesses" | "lawyers") => void;
   startEvidence: (mode: EvidenceMode) => void;
   stopEvidence: () => void;
   tickRec: () => void;
@@ -232,6 +234,7 @@ export const useShield = create<ShieldState>((set, get) => ({
   sosOpen: false,
   sosHits: [],
   sosAt: null,
+  sosRosterTab: "witnesses",
   evidenceMode: null,
   recording: false,
   recSeconds: 0,
@@ -600,6 +603,7 @@ export const useShield = create<ShieldState>((set, get) => ({
       sosOpen: true,
       sosHits: hits,
       sosAt: new Date().toLocaleString(),
+      sosRosterTab: "witnesses",
     });
     if (!get().recording) get().startEvidence("sos");
     else if (get().screen !== "hit") set({ screen: "hit", nav: "home" });
@@ -609,6 +613,7 @@ export const useShield = create<ShieldState>((set, get) => ({
   },
 
   closeSos: () => set({ sosOpen: false }),
+  setSosRosterTab: (tab) => set({ sosRosterTab: tab }),
 
   startEvidence: (mode) => {
     void primeDualCameras();
