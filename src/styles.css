@@ -143,6 +143,7 @@ html[data-theme="dark"] .brand-mark {
 .illum-logo[aria-pressed="true"] {
   --illum: var(--color-logo);
   background-color: var(--color-logo);
+  color: #fff;
 }
 
 .illum-sos:active,
