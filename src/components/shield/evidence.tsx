@@ -494,60 +494,99 @@ function WitnessRoster({
   hideUntilSelected?: boolean;
   showLawyerTab?: boolean;
 }) {
-  const startMatch = useShield((s) => s.startMatch);
   const [tab, setTab] = useState<"witnesses" | "lawyers">("witnesses");
-  const [approved, setApproved] = useState<string[]>([]);
-  const [expanded, setExpanded] = useState<string | null>(null);
-  const chosen = REGISTERED_WITNESSES.filter((w) => approved.includes(w.id));
-  const pool = REGISTERED_WITNESSES.filter((w) => !approved.includes(w.id));
-  const expandedWitness = REGISTERED_WITNESSES.find((w) => w.id === expanded);
-  const full = approved.length >= 6;
-  const showGrid = !hideUntilSelected || chosen.length > 0;
+  const [approvedLawyers, setApprovedLawyers] = useState<string[]>([]);
+  const [approvedWitnesses, setApprovedWitnesses] = useState<string[]>([]);
+  const [expanded, setExpanded] = useState<{ kind: "lawyer" | "witness"; id: string } | null>(null);
+
+  const lawyerSeats = approvedLawyers
+    .map((id) => SOS_LAWYERS.find((l) => l.id === id))
+    .filter((l): l is (typeof SOS_LAWYERS)[number] => Boolean(l))
+    .map((l) => ({
+      key: `lawyer-${l.id}`,
+      kind: "lawyer" as const,
+      id: l.id,
+      photo: l.photo,
+      title: l.name,
+      sub: l.firm,
+    }));
+  const witnessSeats = approvedWitnesses
+    .map((id) => REGISTERED_WITNESSES.find((w) => w.id === id))
+    .filter((w): w is (typeof REGISTERED_WITNESSES)[number] => Boolean(w))
+    .map((w) => ({
+      key: `witness-${w.id}`,
+      kind: "witness" as const,
+      id: w.id,
+      photo: w.photo,
+      title: w.nick,
+      sub: w.name,
+    }));
+  const seats = [...lawyerSeats, ...witnessSeats];
+  const lawyerPool = SOS_LAWYERS.filter((l) => !approvedLawyers.includes(l.id));
+  const witnessPool = REGISTERED_WITNESSES.filter((w) => !approvedWitnesses.includes(w.id));
+  const full = seats.length >= 6;
+  const showGrid = !hideUntilSelected || seats.length > 0;
   const listTab = showLawyerTab ? tab : "witnesses";
+  const expandedSeat = expanded
+    ? seats.find((s) => s.kind === expanded.kind && s.id === expanded.id)
+    : undefined;
+
+  const addLawyer = (id: string) => {
+    setApprovedLawyers((ids) => {
+      if (ids.includes(id) || ids.length + approvedWitnesses.length >= 6) return ids;
+      return [...ids, id];
+    });
+  };
+  const addWitness = (id: string) => {
+    setApprovedWitnesses((ids) => {
+      if (ids.includes(id) || ids.length + approvedLawyers.length >= 6) return ids;
+      return [...ids, id];
+    });
+  };
+
+  const renderTile = (seat: (typeof seats)[number]) => (
+    <button
+      key={seat.key}
+      type="button"
+      onClick={() => setExpanded({ kind: seat.kind, id: seat.id })}
+      className="overflow-hidden rounded-xl border border-line bg-canvas text-left"
+    >
+      <WitnessAvatar src={seat.photo} alt={seat.title} className="aspect-square w-full" />
+      <div className="px-1.5 py-1">
+        <div className="truncate text-[10px] font-semibold text-ink">{seat.title}</div>
+        <div className="truncate text-[9px] text-muted">{seat.sub}</div>
+      </div>
+    </button>
+  );
 
   return (
     <div className="space-y-2">
       {showGrid ? (
         <div className="relative overflow-hidden rounded-2xl border border-line bg-elev">
-          {expandedWitness ? (
+          {expandedSeat ? (
             <button
               type="button"
               className="relative block aspect-video w-full bg-paper"
               onClick={() => setExpanded(null)}
-              aria-label={`Close ${expandedWitness.name} preview`}
+              aria-label={`Close ${expandedSeat.title} preview`}
             >
               <WitnessAvatar
-                src={expandedWitness.photo}
-                alt={expandedWitness.name}
+                src={expandedSeat.photo}
+                alt={expandedSeat.title}
                 className="absolute inset-0 size-full"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 text-left text-white">
-                <div className="text-sm font-semibold">{expandedWitness.name}</div>
-                <div className="text-[11px] text-white/80">@{expandedWitness.nick}</div>
+                <div className="text-sm font-semibold">{expandedSeat.title}</div>
+                <div className="text-[11px] text-white/80">{expandedSeat.sub}</div>
               </div>
             </button>
           ) : hideUntilSelected ? (
-            <div className="grid grid-cols-3 gap-1.5 p-1.5">
-              {chosen.map((w) => (
-                <button
-                  key={w.id}
-                  type="button"
-                  onClick={() => setExpanded(w.id)}
-                  className="overflow-hidden rounded-xl border border-line bg-canvas text-left"
-                >
-                  <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
-                  <div className="px-1.5 py-1">
-                    <div className="truncate text-[10px] font-semibold text-ink">{w.nick}</div>
-                    <div className="truncate text-[9px] text-muted">{w.name}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
+            <div className="grid grid-cols-3 gap-1.5 p-1.5">{seats.map(renderTile)}</div>
           ) : (
             <div className="grid grid-cols-3 gap-1.5 p-1.5">
               {Array.from({ length: 6 }, (_, i) => {
-                const w = chosen[i];
-                if (!w) {
+                const seat = seats[i];
+                if (!seat) {
                   return (
                     <div
                       key={`empty-${i}`}
@@ -557,20 +596,7 @@ function WitnessRoster({
                     </div>
                   );
                 }
-                return (
-                  <button
-                    key={w.id}
-                    type="button"
-                    onClick={() => setExpanded(w.id)}
-                    className="overflow-hidden rounded-xl border border-line bg-canvas text-left"
-                  >
-                    <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
-                    <div className="px-1.5 py-1">
-                      <div className="truncate text-[10px] font-semibold text-ink">{w.nick}</div>
-                      <div className="truncate text-[9px] text-muted">{w.name}</div>
-                    </div>
-                  </button>
-                );
+                return renderTile(seat);
               })}
             </div>
           )}
@@ -600,13 +626,13 @@ function WitnessRoster({
         </div>
       ) : null}
 
-      {listTab === "lawyers" ? (
+      {full ? null : listTab === "lawyers" ? (
         <div className="max-h-40 overflow-y-auto rounded-2xl border border-line bg-elev">
-          {SOS_LAWYERS.map((lawyer) => (
+          {lawyerPool.map((lawyer) => (
             <button
               key={lawyer.id}
               type="button"
-              onClick={() => startMatch()}
+              onClick={() => addLawyer(lawyer.id)}
               className="flex w-full items-center gap-3 border-b border-line px-3 py-2 text-left last:border-b-0"
             >
               <WitnessAvatar src={lawyer.photo} alt={lawyer.name} className="size-9 shrink-0 rounded-full" />
@@ -619,15 +645,13 @@ function WitnessRoster({
             </button>
           ))}
         </div>
-      ) : full ? null : (
+      ) : (
         <div className="max-h-40 overflow-y-auto rounded-2xl border border-line bg-elev">
-          {pool.map((w) => (
+          {witnessPool.map((w) => (
             <button
               key={w.id}
               type="button"
-              onClick={() =>
-                setApproved((ids) => (ids.includes(w.id) || ids.length >= 6 ? ids : [...ids, w.id]))
-              }
+              onClick={() => addWitness(w.id)}
               className="flex w-full items-center gap-3 border-b border-line px-3 py-2 text-left last:border-b-0"
             >
               <WitnessAvatar src={w.photo} alt={w.name} className="size-9 shrink-0 rounded-full" />
