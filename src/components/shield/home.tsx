@@ -60,7 +60,7 @@ export function HomeScreen() {
           <Scale className="size-6" />
         </div>
         <div className="flex-1">
-          <div className="text-sm font-semibold">Connect to attorney</div>
+          <div className="text-sm font-semibold">Solicitor-Barrister</div>
           <div className="text-[11px] opacity-80">Live dual-cam</div>
         </div>
         <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-500" aria-label="Online">
