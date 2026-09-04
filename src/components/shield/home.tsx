@@ -56,7 +56,7 @@ export function HomeScreen() {
         onClick={() => startEvidence("attorney")}
         className="illum illum-ink flex w-full items-center gap-4 rounded-3xl p-4 text-left"
       >
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-black/10">
+        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-yellow-400">
           <Scale className="size-6" />
         </div>
         <div className="flex-1">
