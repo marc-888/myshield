@@ -240,7 +240,7 @@ export function HitScreen() {
 
   return (
     <div className="flex min-h-[560px] flex-col bg-ink text-navy-fg">
-      <div className={`relative overflow-hidden ${mode === "witness" ? "min-h-[240px] flex-none" : "min-h-[420px] flex-1"}`}>
+      <div className={`relative overflow-hidden ${mode === "witness" || mode === "sos" ? "min-h-[240px] flex-none" : "min-h-[420px] flex-1"}`}>
         <video
           id="shield-rear-cam"
           data-shield-cam="rear"
@@ -388,7 +388,9 @@ export function HitScreen() {
       </div>
 
       <div className="space-y-2 bg-zinc-950 p-3 pb-4">
-        {mode === "witness" ? <WitnessRoster /> : null}
+        {mode === "witness" || mode === "sos" ? (
+          <WitnessRoster hideUntilSelected={mode === "sos"} />
+        ) : null}
 
         {mode === "attorney" && callActive ? (
           <p className="text-[10px] text-zinc-400">
@@ -485,52 +487,39 @@ function WitnessAvatar({ src, alt, className }: { src: string; alt: string; clas
   );
 }
 
-function WitnessRoster() {
+function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: boolean }) {
   const [approved, setApproved] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const chosen = REGISTERED_WITNESSES.filter((w) => approved.includes(w.id));
   const pool = REGISTERED_WITNESSES.filter((w) => !approved.includes(w.id));
   const expandedWitness = REGISTERED_WITNESSES.find((w) => w.id === expanded);
   const full = approved.length >= 6;
+  const showGrid = !hideUntilSelected || chosen.length > 0;
 
   return (
     <div className="space-y-2">
-      <div className="relative min-h-[148px] overflow-hidden rounded-2xl bg-zinc-900">
-        {expandedWitness ? (
-          <button
-            type="button"
-            className="absolute inset-0 z-10 flex flex-col bg-zinc-900"
-            onClick={() => setExpanded(null)}
-            aria-label={`Close ${expandedWitness.name} preview`}
-          >
-            <WitnessAvatar
-              src={expandedWitness.photo}
-              alt={expandedWitness.name}
-              className="h-40 w-full"
-            />
-            <div className="flex items-center justify-between px-3 py-2 text-left">
-              <div>
+      {showGrid ? (
+        <div className="relative overflow-hidden rounded-2xl bg-zinc-900">
+          {expandedWitness ? (
+            <button
+              type="button"
+              className="relative block aspect-video w-full bg-zinc-950"
+              onClick={() => setExpanded(null)}
+              aria-label={`Close ${expandedWitness.name} preview`}
+            >
+              <WitnessAvatar
+                src={expandedWitness.photo}
+                alt={expandedWitness.name}
+                className="absolute inset-0 size-full"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-3 py-3 text-left">
                 <div className="text-sm font-semibold">{expandedWitness.name}</div>
-                <div className="text-[11px] text-zinc-400">@{expandedWitness.nick}</div>
+                <div className="text-[11px] text-zinc-300">@{expandedWitness.nick}</div>
               </div>
-              <Stars rating={expandedWitness.rating} />
-            </div>
-          </button>
-        ) : (
-          <div className="grid grid-cols-3 gap-1.5 p-1.5">
-            {Array.from({ length: 6 }, (_, i) => {
-              const w = chosen[i];
-              if (!w) {
-                return (
-                  <div
-                    key={`empty-${i}`}
-                    className="flex aspect-square flex-col items-center justify-center rounded-xl border border-dashed border-zinc-700 bg-zinc-950/60 text-[9px] text-zinc-600"
-                  >
-                    Empty
-                  </div>
-                );
-              }
-              return (
+            </button>
+          ) : hideUntilSelected ? (
+            <div className="grid grid-cols-3 gap-1.5 p-1.5">
+              {chosen.map((w) => (
                 <button
                   key={w.id}
                   type="button"
@@ -543,11 +532,41 @@ function WitnessRoster() {
                     <div className="truncate text-[9px] text-zinc-400">{w.name}</div>
                   </div>
                 </button>
-              );
-            })}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-3 gap-1.5 p-1.5">
+              {Array.from({ length: 6 }, (_, i) => {
+                const w = chosen[i];
+                if (!w) {
+                  return (
+                    <div
+                      key={`empty-${i}`}
+                      className="flex aspect-square flex-col items-center justify-center rounded-xl border border-dashed border-zinc-700 bg-zinc-950/60 text-[9px] text-zinc-600"
+                    >
+                      Empty
+                    </div>
+                  );
+                }
+                return (
+                  <button
+                    key={w.id}
+                    type="button"
+                    onClick={() => setExpanded(w.id)}
+                    className="overflow-hidden rounded-xl bg-zinc-800 text-left"
+                  >
+                    <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
+                    <div className="px-1.5 py-1">
+                      <div className="truncate text-[10px] font-semibold">{w.nick}</div>
+                      <div className="truncate text-[9px] text-zinc-400">{w.name}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      ) : null}
 
       {full ? null : (
         <div className="max-h-40 overflow-y-auto rounded-2xl bg-zinc-900">
