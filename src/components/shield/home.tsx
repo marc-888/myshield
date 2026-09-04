@@ -63,7 +63,9 @@ export function HomeScreen() {
           <div className="text-sm font-semibold">Connect to attorney</div>
           <div className="text-[11px] opacity-80">Live dual-cam · hashed GPS evidence</div>
         </div>
-        <span className="rounded-full border border-black px-2 py-1 text-[10px] font-medium">Live</span>
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-emerald-500" aria-label="Online">
+          <span className="size-2.5 rounded-full bg-white" />
+        </span>
       </button>
 
       <div className="grid grid-cols-2 gap-4">
