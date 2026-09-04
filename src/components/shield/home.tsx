@@ -72,7 +72,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("resourcelibrary")}
-          className="flex min-h-[84px] flex-col items-start justify-center gap-1 rounded-3xl bg-navy-deep p-4 text-left text-navy-fg"
+          className="flex min-h-[84px] flex-col items-start justify-center gap-1 rounded-3xl bg-zinc-500 p-4 text-left text-white"
         >
           <BookOpen className="size-5" />
           <span className="text-sm font-semibold">Resource Library</span>
