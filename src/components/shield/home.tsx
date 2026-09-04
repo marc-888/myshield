@@ -54,16 +54,16 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startEvidence("attorney")}
-        className="illum illum-green flex w-full items-center gap-4 rounded-3xl bg-witness p-4 text-left text-navy-fg"
+        className="illum illum-ink flex w-full items-center gap-4 rounded-3xl p-4 text-left"
       >
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-black/10">
           <Scale className="size-6" />
         </div>
         <div className="flex-1">
           <div className="text-sm font-semibold">Connect to attorney</div>
-          <div className="text-[11px] opacity-90">Live dual-cam · hashed GPS evidence</div>
+          <div className="text-[11px] opacity-80">Live dual-cam · hashed GPS evidence</div>
         </div>
-        <span className="rounded-full bg-white px-2 py-1 text-[10px] font-medium text-witness">Live</span>
+        <span className="rounded-full border border-black px-2 py-1 text-[10px] font-medium">Live</span>
       </button>
 
       <div className="grid grid-cols-2 gap-4">
