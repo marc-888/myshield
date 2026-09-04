@@ -80,55 +80,21 @@
   display: inline-flex;
   align-items: baseline;
   color: var(--color-ink);
-  font-size: 36px;
+  font-size: 28px;
   line-height: 0.92;
-  padding-bottom: 0.26em;
   overflow: visible;
 }
 
 .brand-mark-sm {
-  font-size: 28px;
+  font-size: 22px;
 }
 
 .brand-mark-lg {
-  font-size: 48px;
+  font-size: 36px;
 }
 
 html[data-theme="dark"] .brand-mark {
   color: #fff;
-}
-
-.brand-mark::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.2em;
-  height: 0.1em;
-  min-height: 3px;
-  background: var(--color-logo);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.brand-mark > span {
-  position: relative;
-  z-index: 1;
-}
-
-.brand-mark .brand-y {
-  padding-inline: 0.04em;
-}
-
-.brand-mark .brand-y::after {
-  content: "";
-  position: absolute;
-  left: -0.06em;
-  right: -0.06em;
-  bottom: 0.06em;
-  height: 0.32em;
-  background: var(--brand-gap, var(--color-paper));
-  z-index: -1;
 }
 
 .illum {
