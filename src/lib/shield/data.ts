@@ -44,6 +44,25 @@ export const PANEL = [
   },
 ];
 
+export const REGISTERED_WITNESSES: {
+  id: string;
+  name: string;
+  nick: string;
+  rating: number;
+  photo: string;
+}[] = [
+  { id: "w1", name: "Maya Chen", nick: "Maya", rating: 5, photo: "https://randomuser.me/api/portraits/women/65.jpg" },
+  { id: "w2", name: "Owen Blake", nick: "OB", rating: 4, photo: "https://randomuser.me/api/portraits/men/32.jpg" },
+  { id: "w3", name: "Sofia Rahman", nick: "Sofi", rating: 5, photo: "https://randomuser.me/api/portraits/women/44.jpg" },
+  { id: "w4", name: "Nate Okonkwo", nick: "Nate", rating: 4, photo: "https://randomuser.me/api/portraits/men/75.jpg" },
+  { id: "w5", name: "Lila Nguyen", nick: "Lila", rating: 5, photo: "https://randomuser.me/api/portraits/women/21.jpg" },
+  { id: "w6", name: "Harry Paxton", nick: "Haze", rating: 3, photo: "https://randomuser.me/api/portraits/men/11.jpg" },
+  { id: "w7", name: "Amara Singh", nick: "Ams", rating: 5, photo: "https://randomuser.me/api/portraits/women/68.jpg" },
+  { id: "w8", name: "Joe Barrett", nick: "JB", rating: 4, photo: "https://randomuser.me/api/portraits/men/52.jpg" },
+  { id: "w9", name: "Tessa Ward", nick: "Tess", rating: 5, photo: "https://randomuser.me/api/portraits/women/12.jpg" },
+  { id: "w10", name: "Chris Vale", nick: "CV", rating: 4, photo: "https://randomuser.me/api/portraits/men/22.jpg" },
+];
+
 export const LAW_ADS: {
   id: string;
   kicker: string;

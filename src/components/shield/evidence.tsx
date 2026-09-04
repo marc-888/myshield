@@ -8,9 +8,10 @@ import {
   PhoneOff,
   Scale,
   Square,
+  Star,
   Sun,
 } from "lucide-react";
-import { CATEGORIES, LAWYER } from "@/lib/shield/data";
+import { CATEGORIES, LAWYER, REGISTERED_WITNESSES } from "@/lib/shield/data";
 import {
   attachCameras,
   applyTorch,
@@ -235,11 +236,11 @@ export function HitScreen() {
             : "Attorney — live evidence"
       : mode === "sos"
         ? "SOS — recording"
-        : "Witness a crime";
+        : "Witness recording";
 
   return (
     <div className="flex min-h-[560px] flex-col bg-ink text-navy-fg">
-      <div className="relative min-h-[420px] flex-1 overflow-hidden">
+      <div className={`relative overflow-hidden ${mode === "witness" ? "min-h-[240px] flex-none" : "min-h-[420px] flex-1"}`}>
         <video
           id="shield-rear-cam"
           data-shield-cam="rear"
@@ -387,18 +388,12 @@ export function HitScreen() {
       </div>
 
       <div className="space-y-2 bg-zinc-950 p-3 pb-4">
+        {mode === "witness" ? <WitnessRoster /> : null}
+
         {mode === "attorney" && callActive ? (
           <p className="text-[10px] text-zinc-400">
             Lawyer is watching both cameras and the hashed GPS feed in real time. If they hang up,
             recording keeps going. If you end it, everything is saved.
-          </p>
-        ) : null}
-
-        {mode === "witness" ? (
-          <p className="text-[10px] text-zinc-400">
-            Dual cam + GPS hashed every 4s. Back and front record together
-            {dualCamMode === "multiplex" ? " (this phone switches lenses so both views are captured)." : "."}{" "}
-            Call 000 if someone is in danger.
           </p>
         ) : null}
 
@@ -458,6 +453,126 @@ export function HitScreen() {
 
 const MEMBER_LOC = "Gold Coast, QLD";
 
+function Stars({ rating }: { rating: number }) {
+  return (
+    <span className="inline-flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star
+          key={i}
+          className={`size-3 ${i < rating ? "fill-amber-400 text-amber-400" : "text-zinc-600"}`}
+        />
+      ))}
+    </span>
+  );
+}
+
+function WitnessAvatar({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div className={`flex items-center justify-center bg-zinc-700 text-[10px] font-bold ${className ?? ""}`}>
+        {alt.slice(0, 2).toUpperCase()}
+      </div>
+    );
+  }
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`object-cover ${className ?? ""}`}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
+function WitnessRoster() {
+  const [approved, setApproved] = useState<string[]>([]);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const chosen = REGISTERED_WITNESSES.filter((w) => approved.includes(w.id));
+  const pool = REGISTERED_WITNESSES.filter((w) => !approved.includes(w.id));
+  const expandedWitness = REGISTERED_WITNESSES.find((w) => w.id === expanded);
+  const full = approved.length >= 6;
+
+  return (
+    <div className="space-y-2">
+      <div className="relative min-h-[148px] overflow-hidden rounded-2xl bg-zinc-900">
+        {expandedWitness ? (
+          <button
+            type="button"
+            className="absolute inset-0 z-10 flex flex-col bg-zinc-900"
+            onClick={() => setExpanded(null)}
+            aria-label={`Close ${expandedWitness.name} preview`}
+          >
+            <WitnessAvatar
+              src={expandedWitness.photo}
+              alt={expandedWitness.name}
+              className="h-40 w-full"
+            />
+            <div className="flex items-center justify-between px-3 py-2 text-left">
+              <div>
+                <div className="text-sm font-semibold">{expandedWitness.name}</div>
+                <div className="text-[11px] text-zinc-400">@{expandedWitness.nick}</div>
+              </div>
+              <Stars rating={expandedWitness.rating} />
+            </div>
+          </button>
+        ) : (
+          <div className="grid grid-cols-3 gap-1.5 p-1.5">
+            {Array.from({ length: 6 }, (_, i) => {
+              const w = chosen[i];
+              if (!w) {
+                return (
+                  <div
+                    key={`empty-${i}`}
+                    className="flex aspect-square flex-col items-center justify-center rounded-xl border border-dashed border-zinc-700 bg-zinc-950/60 text-[9px] text-zinc-600"
+                  >
+                    Empty
+                  </div>
+                );
+              }
+              return (
+                <button
+                  key={w.id}
+                  type="button"
+                  onClick={() => setExpanded(w.id)}
+                  className="overflow-hidden rounded-xl bg-zinc-800 text-left"
+                >
+                  <WitnessAvatar src={w.photo} alt={w.name} className="aspect-square w-full" />
+                  <div className="px-1.5 py-1">
+                    <div className="truncate text-[10px] font-semibold">{w.nick}</div>
+                    <div className="truncate text-[9px] text-zinc-400">{w.name}</div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {full ? null : (
+        <div className="max-h-40 overflow-y-auto rounded-2xl bg-zinc-900">
+          {pool.map((w) => (
+            <button
+              key={w.id}
+              type="button"
+              onClick={() =>
+                setApproved((ids) => (ids.includes(w.id) || ids.length >= 6 ? ids : [...ids, w.id]))
+              }
+              className="flex w-full items-center gap-3 border-b border-zinc-800 px-3 py-2 text-left last:border-b-0"
+            >
+              <WitnessAvatar src={w.photo} alt={w.name} className="size-9 shrink-0 rounded-full" />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-xs font-semibold">{w.name}</div>
+                <div className="text-[10px] text-zinc-400">@{w.nick}</div>
+              </div>
+              <Stars rating={w.rating} />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 function SimRear({ night, torch }: { night: boolean; torch: boolean }) {
   return (
