@@ -63,6 +63,64 @@ export const REGISTERED_WITNESSES: {
   { id: "w10", name: "Chris Vale", nick: "CV", rating: 4, photo: "https://randomuser.me/api/portraits/men/22.jpg" },
 ];
 
+export const SOS_LAWYERS: {
+  id: string;
+  name: string;
+  firm: string;
+  rating: number;
+  specialty: string;
+  photo: string;
+}[] = [
+  {
+    id: "l1",
+    name: "Dr. Priya Sharma",
+    firm: "Gold Coast Criminal Law Group",
+    rating: 5,
+    specialty: "Criminal · drug driving",
+    photo: "https://randomuser.me/api/portraits/women/47.jpg",
+  },
+  {
+    id: "l2",
+    name: "James Morrow",
+    firm: "Morrow Traffic Defence",
+    rating: 5,
+    specialty: "Traffic · RBT · licences",
+    photo: "https://randomuser.me/api/portraits/men/36.jpg",
+  },
+  {
+    id: "l3",
+    name: "Tom Keene",
+    firm: "Keene Criminal Chambers",
+    rating: 4,
+    specialty: "Bail · police complaints",
+    photo: "https://randomuser.me/api/portraits/men/41.jpg",
+  },
+  {
+    id: "l4",
+    name: "Aisha Rahman",
+    firm: "Northcliffe Family Law",
+    rating: 5,
+    specialty: "Family · parenting",
+    photo: "https://randomuser.me/api/portraits/women/33.jpg",
+  },
+  {
+    id: "l5",
+    name: "Ben Walsh",
+    firm: "Harbourfront Legal",
+    rating: 4,
+    specialty: "Business · contracts",
+    photo: "https://randomuser.me/api/portraits/men/15.jpg",
+  },
+  {
+    id: "l6",
+    name: "Duty solicitor roster",
+    firm: "Night Desk QLD",
+    rating: 5,
+    specialty: "24/7 criminal duty",
+    photo: "https://randomuser.me/api/portraits/women/8.jpg",
+  },
+];
+
 export const LAW_ADS: {
   id: string;
   kicker: string;

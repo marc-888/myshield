@@ -11,7 +11,7 @@ import {
   Star,
   Sun,
 } from "lucide-react";
-import { CATEGORIES, LAWYER, REGISTERED_WITNESSES } from "@/lib/shield/data";
+import { CATEGORIES, LAWYER, REGISTERED_WITNESSES, SOS_LAWYERS } from "@/lib/shield/data";
 import {
   attachCameras,
   applyTorch,
@@ -389,7 +389,7 @@ export function HitScreen() {
 
       <div className="space-y-2 bg-canvas p-3 pb-4">
         {mode === "witness" || mode === "sos" ? (
-          <WitnessRoster hideUntilSelected={mode === "sos"} />
+          <WitnessRoster hideUntilSelected={mode === "sos"} showLawyerTab={mode === "sos"} />
         ) : null}
 
         {mode === "attorney" && callActive ? (
@@ -487,7 +487,15 @@ function WitnessAvatar({ src, alt, className }: { src: string; alt: string; clas
   );
 }
 
-function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: boolean }) {
+function WitnessRoster({
+  hideUntilSelected = false,
+  showLawyerTab = false,
+}: {
+  hideUntilSelected?: boolean;
+  showLawyerTab?: boolean;
+}) {
+  const startMatch = useShield((s) => s.startMatch);
+  const [tab, setTab] = useState<"witnesses" | "lawyers">("witnesses");
   const [approved, setApproved] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
   const chosen = REGISTERED_WITNESSES.filter((w) => approved.includes(w.id));
@@ -495,6 +503,7 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
   const expandedWitness = REGISTERED_WITNESSES.find((w) => w.id === expanded);
   const full = approved.length >= 6;
   const showGrid = !hideUntilSelected || chosen.length > 0;
+  const listTab = showLawyerTab ? tab : "witnesses";
 
   return (
     <div className="space-y-2">
@@ -568,7 +577,49 @@ function WitnessRoster({ hideUntilSelected = false }: { hideUntilSelected?: bool
         </div>
       ) : null}
 
-      {full ? null : (
+      {showLawyerTab ? (
+        <div className="grid grid-cols-2 gap-1 rounded-2xl border border-line bg-elev p-1">
+          <button
+            type="button"
+            onClick={() => setTab("witnesses")}
+            className={`rounded-xl py-2 text-xs font-semibold ${
+              tab === "witnesses" ? "bg-navy text-navy-fg" : "text-muted"
+            }`}
+          >
+            Witnesses
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("lawyers")}
+            className={`rounded-xl py-2 text-xs font-semibold ${
+              tab === "lawyers" ? "bg-navy text-navy-fg" : "text-muted"
+            }`}
+          >
+            Lawyers
+          </button>
+        </div>
+      ) : null}
+
+      {listTab === "lawyers" ? (
+        <div className="max-h-40 overflow-y-auto rounded-2xl border border-line bg-elev">
+          {SOS_LAWYERS.map((lawyer) => (
+            <button
+              key={lawyer.id}
+              type="button"
+              onClick={() => startMatch()}
+              className="flex w-full items-center gap-3 border-b border-line px-3 py-2 text-left last:border-b-0"
+            >
+              <WitnessAvatar src={lawyer.photo} alt={lawyer.name} className="size-9 shrink-0 rounded-full" />
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-xs font-semibold text-ink">{lawyer.name}</div>
+                <div className="truncate text-[10px] text-muted">{lawyer.firm}</div>
+                <div className="truncate text-[10px] text-muted">{lawyer.specialty}</div>
+              </div>
+              <Stars rating={lawyer.rating} />
+            </button>
+          ))}
+        </div>
+      ) : full ? null : (
         <div className="max-h-40 overflow-y-auto rounded-2xl border border-line bg-elev">
           {pool.map((w) => (
             <button
