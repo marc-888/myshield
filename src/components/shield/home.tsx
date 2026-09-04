@@ -27,7 +27,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("hotline")}
-          className="illum illum-logo flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl border border-navy bg-white px-1 py-3 text-center text-navy active:scale-[0.97]"
+          className="illum illum-white flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl px-1 py-3 text-center active:scale-[0.97]"
         >
           <Headset className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">24/7</span>
