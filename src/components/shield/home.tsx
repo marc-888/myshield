@@ -1,5 +1,4 @@
 import { BookOpen, Check, Circle, Eye, Gavel, Headset, Scale, Siren } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
 
@@ -141,14 +140,6 @@ export function HomeScreen() {
           </div>
           <span>3 lawyers available • QLD criminal & traffic specialists</span>
         </div>
-      </div>
-
-      <Link to="/install" className="mb-3 block text-center text-[11px] text-navy underline">
-        Install Android app
-      </Link>
-      <div className="text-[10px] text-muted">
-        Demo prototype. Dual-cam evidence, GPS hashes and torch use this device. A production
-        version requires licensed lawyers, insurance, and Privacy Act compliance.
       </div>
     </div>
   );
