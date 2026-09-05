@@ -19,8 +19,6 @@ export function HomeScreen() {
   ];
   const doneCount = setup.filter((s) => s.done).length;
   const showChecklist = doneCount < setup.length;
-  const actionH =
-    "box-border h-[56px] min-h-[56px] max-h-[56px] py-0 sm:h-[72px] sm:min-h-[72px] sm:max-h-[72px]";
 
   return (
     <div>
@@ -29,7 +27,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("hotline")}
-          className={`illum illum-white flex ${actionH} flex-col items-center justify-center gap-1 rounded-2xl px-1 text-center active:scale-[0.97]`}
+          className="illum illum-white flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl px-1 py-3 text-center active:scale-[0.97]"
         >
           <Headset className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">24/7</span>
@@ -37,7 +35,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => startEvidence("witness")}
-          className={`illum illum-gold flex ${actionH} flex-col items-center justify-center gap-1 rounded-2xl px-1 text-center active:scale-[0.97]`}
+          className="illum illum-gold flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl px-1 py-3 text-center active:scale-[0.97]"
         >
           <Eye className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">Witness</span>
@@ -46,7 +44,7 @@ export function HomeScreen() {
           type="button"
           onClick={fireSos}
           aria-pressed={sosOpen}
-          className={`illum illum-sos flex ${actionH} flex-col items-center justify-center gap-1 rounded-2xl bg-sos px-1 text-center text-sos-fg active:scale-[0.97]`}
+          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-sos px-1 py-3 text-center text-sos-fg active:scale-[0.97]"
         >
           <Siren className="size-6" />
           <span className="text-[11px] leading-tight font-semibold">SOS</span>
@@ -56,9 +54,9 @@ export function HomeScreen() {
       <button
         type="button"
         onClick={() => startEvidence("attorney")}
-        className={`illum illum-ink flex ${actionH} w-full items-center gap-3 rounded-3xl px-3 text-left`}
+        className="illum illum-ink flex w-full items-center gap-4 rounded-3xl p-4 text-left"
       >
-        <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-yellow-400 sm:size-10 sm:rounded-2xl">
+        <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-yellow-400">
           <Scale className="size-6" />
         </div>
         <div className="flex-1">
@@ -74,7 +72,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("resourcelibrary")}
-          className={`flex ${actionH} flex-col items-center justify-center gap-1 rounded-3xl bg-zinc-500 px-3 text-center text-white`}
+          className="flex min-h-[72px] flex-col items-center justify-center gap-1 rounded-3xl bg-zinc-500 p-4 text-center text-white"
         >
           <BookOpen className="size-5" />
           <span className="text-sm font-semibold">Resource Library</span>
@@ -82,7 +80,7 @@ export function HomeScreen() {
         <button
           type="button"
           onClick={() => go("litigation")}
-          className={`flex ${actionH} flex-col items-center justify-center gap-1 rounded-3xl bg-navy-deep px-3 text-center text-navy-fg`}
+          className="flex min-h-[72px] flex-col items-center justify-center gap-1 rounded-3xl bg-navy-deep p-4 text-center text-navy-fg"
         >
           <Gavel className="size-5" />
           <span className="text-sm font-semibold">Litigation</span>
