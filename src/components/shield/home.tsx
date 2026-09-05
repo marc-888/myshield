@@ -1,6 +1,6 @@
 import { BookOpen, Check, Circle, Eye, Gavel, Headset, Scale, Siren } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { LAW_ADS, PANEL } from "@/lib/shield/data";
+import { PANEL } from "@/lib/shield/data";
 import { useShield } from "@/lib/shield/store";
 
 export function HomeScreen() {
@@ -140,42 +140,6 @@ export function HomeScreen() {
             ))}
           </div>
           <span>3 lawyers available • QLD criminal & traffic specialists</span>
-        </div>
-      </div>
-
-      <div className="-mx-5 mb-4">
-        <div className="mb-2 flex items-end justify-between px-5">
-          <div className="text-xs font-semibold text-ink">Lawyers & firms</div>
-          <div className="text-[10px] text-muted">Paid ads · mockup only</div>
-        </div>
-        <div className="ad-rail px-5">
-          {LAW_ADS.map((ad) => (
-            <article
-              key={ad.id}
-              className={`ad-card ad-card-${ad.tone} flex snap-start flex-col justify-between rounded-3xl p-4`}
-            >
-              <div>
-                <div className="ad-kicker">{ad.kicker}</div>
-                <div className="mt-2 font-display text-lg leading-tight font-semibold tracking-tight">
-                  {ad.headline}
-                </div>
-                <div className="mt-2 text-sm font-semibold">{ad.firm}</div>
-                <div className="text-[11px] opacity-80">{ad.lawyer}</div>
-                <p className="mt-2 text-[11px] leading-snug opacity-90">{ad.body}</p>
-              </div>
-              <div className="mt-3">
-                <div className="text-[10px] opacity-80">{ad.proof}</div>
-                <div className="text-[10px] opacity-70">{ad.hours}</div>
-                <button
-                  type="button"
-                  onClick={() => (ad.id === "nightdesk" ? go("hotline") : startEvidence("attorney"))}
-                  className="ad-cta mt-3 w-full rounded-full px-3 py-2 text-xs font-semibold"
-                >
-                  {ad.cta}
-                </button>
-              </div>
-            </article>
-          ))}
         </div>
       </div>
 
