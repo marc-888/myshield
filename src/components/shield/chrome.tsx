@@ -4,7 +4,6 @@ import {
   ArrowLeft,
   BatteryMedium,
   Home,
-  Info,
   MessageSquare,
   FolderClosed,
   Ellipsis,
@@ -383,12 +382,6 @@ export function PhoneChrome({ children }: { children: ReactNode }) {
           }}
         >
           <StatusBar />
-          {!immersive ? (
-            <div className="disclaimer-bar overflow-hidden border-b border-disclaimer-line bg-disclaimer px-3 py-1.5 text-center text-[8px] leading-none whitespace-nowrap text-disclaimer-fg">
-              <Info className="mr-1 inline size-2.5 align-[-1px]" />
-              Technology platform only — not legal advice. Comply with lawful police directions.
-            </div>
-          ) : null}
           {!immersive ? <AppHeader /> : null}
           {recording && screen !== "hit" ? (
             <button
