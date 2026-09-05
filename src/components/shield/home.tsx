@@ -26,11 +26,12 @@ export function HomeScreen() {
       <div className="grid grid-cols-3 gap-4">
         <button
           type="button"
-          onClick={() => go("hotline")}
-          className="illum illum-white flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl px-1 py-3 text-center active:scale-[0.97]"
+          onClick={fireSos}
+          aria-pressed={sosOpen}
+          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-sos px-1 py-3 text-center text-sos-fg active:scale-[0.97]"
         >
-          <Headset className="size-6" />
-          <span className="text-[11px] leading-tight font-semibold">24/7</span>
+          <Siren className="size-6" />
+          <span className="text-[11px] leading-tight font-semibold">SOS</span>
         </button>
         <button
           type="button"
@@ -42,12 +43,11 @@ export function HomeScreen() {
         </button>
         <button
           type="button"
-          onClick={fireSos}
-          aria-pressed={sosOpen}
-          className="illum illum-sos flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl bg-sos px-1 py-3 text-center text-sos-fg active:scale-[0.97]"
+          onClick={() => go("hotline")}
+          className="illum illum-white flex min-h-[88px] flex-col items-center justify-center gap-1.5 rounded-2xl px-1 py-3 text-center active:scale-[0.97]"
         >
-          <Siren className="size-6" />
-          <span className="text-[11px] leading-tight font-semibold">SOS</span>
+          <Headset className="size-6" />
+          <span className="text-[11px] leading-tight font-semibold">24/7</span>
         </button>
       </div>
 
